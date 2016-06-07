@@ -1,0 +1,18 @@
+<style>
+#role{width:100%;margin:100px auto 0px;}
+#role img{float:right;width:85%;}
+.left{float:left;width:30%;height:200px;}
+.right{float:left;margin-left:2%;width:68%;height:200px;}}
+</style>
+<div id="role">
+	<div class="left"><img src="__PUBLIC__/appImg/role.png"></div>
+	<div class="right">
+		<notempty name="content">
+			<p style="font-size:12px">{$content}</p>
+			<!-- <p style="font-size:12px"><a href="javascript:history.go(-1);">点此返回</a></p> -->
+		<else />
+			<h1 style="font-size:25px"><notempty name="type">非常抱歉！<else />禁止访问！</notempty></h1>
+			<p style="font-size:12px"><notempty name="type">您查找的数据已被删除！<else />您没有权限操作，请联系您的管理员！</notempty></p>
+		</notempty>
+	</div>
+</div>

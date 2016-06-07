@@ -1,0 +1,370 @@
+/*
+===================
+初始化【请勿修改】
+===================
+*/body{
+    font-family:Arial, "Microsoft Yahei", Simsun;}
+html,body,
+div, dl, dt, dd, ul, p, th, td,
+h1, h2, h3, h4, h5, h6,
+pre, code, form,
+fieldset, legend{
+    margin: 0;
+    padding: 0;
+}
+cite,
+em,
+strong,
+th {
+    font-style: normal;
+}
+td,
+th,
+div {
+    word-break:break-all;
+    word-wrap:break-word;
+}
+form{
+    display:inline;
+}
+table {
+    border-collapse: collapse;
+    border-spacing:0;
+}
+
+.tac{
+    text-align:center !important;
+}
+
+body{
+    font:12px/1.5 Arial,Microsoft Yahei,Simsun;
+    color:#333;
+    background:url(../images/bg.png);
+}
+a:link{
+    color:#246EA5;
+    text-decoration:none;
+}
+a:hover{
+    text-decoration:underline;
+}
+a:visited{
+    color:#762e9c;
+}
+
+.wrap{
+    margin:0 auto 0;
+    box-shadow:0 0 10px #ccc;
+    width:850px;
+    background:#fff;
+}
+
+.header{
+    background:#1273A3;
+}
+.header{
+    height:80px;
+    box-shadow:0 3px 3px #ddd;
+    position:relative;
+    color:#fff;
+}
+
+.main{
+    padding-top:35px;
+}
+
+
+.footer{
+    text-align:center;
+    padding:15px 0 50px;
+    color:#999999;
+}
+.footer a{
+    color:#999;
+    text-decoration:none;
+}
+.bottom{
+    padding:0 0 25px;
+}
+
+.pact{
+    box-shadow:5px 5px 5px #f7f7f7 inset;
+    border:1px solid #bdbcbc;
+    width:670px;
+    height:350px;
+    padding:10px;
+    overflow:hidden;
+    display:block;
+    overflow-y:scroll;
+    margin:0 auto;
+    font-size:12px;
+    line-height:1.5;
+    margin-bottom:22px;
+    outline:none;
+}
+pre{
+    white-space: pre-wrap;
+    white-space: -moz-pre-wrap;
+    white-space: -pre-wrap;
+    white-space: -o-pre-wrap;
+    word-wrap: break-word;
+    word-break : normal;
+}
+/*
+===================
+版本号
+===================
+*/
+.version{
+    float:right;
+    margin:50px 25px 0 0;
+}
+
+.logo{
+    float:left;
+    width:110px;
+    height:80px;
+    line-height: 80px;
+    font-family: '微软雅黑'; padding-left: 10px;
+    background: url(../images/logo.png) 10px 18px no-repeat;
+	text-indent: 60px;
+	width: 168px;
+}
+
+
+.icon_install,
+.icon_update{
+    float:left;
+    margin-top:35px;
+    width:90px;
+    height:30px;
+    overflow:hidden;
+    text-indent:-2000em;
+}
+
+/*
+===================
+按钮
+===================
+*/
+.btn,
+.btn_old{
+    display:inline-block;
+    width:100px;
+    height:30px;
+    background:url(../images/btn.png) no-repeat;
+    font:bold 14px/30px Arial,"Microsoft Yahei",Simsun;
+    text-decoration:none;
+    color:#fff !important;
+    margin:0 5px;
+    border:0 none;
+    cursor:pointer;
+    vertical-align:top;
+}
+.btn:hover{
+    background-position:0 -30px;
+    text-decoration:none;
+}
+a.btn:visited{
+    color:#ffffff;
+}
+.btn_old,
+.btn_old:hover{
+    background-position:0 -60px;
+    color:#999 !important;
+    cursor:default;
+    text-decoration:none;
+}
+a.btn_old:visited{
+    color:#999 !important;
+}
+
+/*
+===================
+步骤
+===================
+*/
+.step,
+.step li em,
+.step li{
+    background:url(../images/step.png) repeat-x;
+}
+.step{
+    border-bottom:1px solid #dce1e5;
+    height:60px;
+    background-color:#fff;
+}
+.step li{
+    float:left;
+    height:60px;
+    line-height:60px;
+    width:33%;
+    text-align:center;
+    font-size:14px;
+    color:#6f7885;
+    font-weight:700;
+}
+.step li em{
+    width:32px;
+    height:32px;
+    text-align:center;
+    line-height:32px;
+    display:inline-block;
+    background-position:0 -70px;
+    font-size:20px;
+    color:#fff;
+    font-family:Microsoft Yahei;
+    margin-right:10px;
+    vertical-align:0;
+
+}
+.step li.current{
+    background-position:right -106px;
+    background-repeat:no-repeat;
+    color:#246ea5;
+}
+.step li.current em{
+    background-position:-35px -70px;
+}
+.step li.on{
+    background-position:0 -176px;
+}
+.step li.on em{
+    background-position:-70px -70px;
+}
+
+/*
+===================
+服务器检测/信息输入
+===================
+*/
+.server{
+    padding:0 0 10px 130px;
+}
+.server table{
+    margin-bottom:20px;
+}
+.server td{
+    padding:3px 5px;
+	border:1px solid #ccc;
+}
+.server .td1{
+    color:#417b9d;
+    font-weight:700;
+}
+.server .input{
+    border:1px solid;
+    border-color:#e3e9ef;
+    padding:3px;
+    width:200px;
+    font-size: 12px;
+    line-height: 18px;
+}
+.server .input:hover,
+.server .input:focus{
+    border:1px solid #0e85d5;
+    outline:none;
+}
+.gray{
+    color:#bbb;
+}
+.server tr:hover .gray{
+    color:#333;
+}
+
+/*
+===================
+正确错误
+===================
+*/
+.correct_span,
+.error_span{
+    display:block;
+    float:left;
+    width:20px;
+    height:16px;
+    text-indent:-2000em;
+    overflow:hidden;
+    background:url(../images/icon.png) no-repeat;
+    margin-right:5px;
+}
+.error_span{
+    background-position:0 -23px;
+}
+
+/*
+===================
+数据表写入
+===================
+*/
+.install{
+    box-shadow:5px 5px 5px #f7f7f7 inset;
+    border:1px solid #bdbcbc;
+    width:670px;
+    height:350px;
+    padding:10px;
+    overflow:hidden;
+    display:block;
+    overflow-y:scroll;
+    margin:25px auto;
+    font-size:12px;
+    margin-bottom:22px;
+    outline:none;
+}
+.install ul{
+    line-height:1.8;
+}
+
+/*
+===================
+成功提示
+===================
+*/
+.success_tip{
+    /*border:1px solid #e0e9f0;*/
+    background:#fff url(../images/complete.png) 210px center no-repeat;
+    padding:50px 80px 50px 300px;
+    line-height:2;
+}
+.success_tip a,.s4{
+    color:#0166a5;
+    text-decoration:none;
+}
+.success_tip a:hover{
+    text-decoration:underline;
+}
+.error_tip{
+    background:url(../images/ignore.png) 130px 45px no-repeat;
+    padding:50px 80px 60px 230px;
+}
+
+.status_line{
+  text-align: center;
+  margin-top:30px;
+  margin-bottom: 20px;
+}
+
+.status_line img{
+    width: 650px;
+}
+
+.status_line h1{
+    color: #1B5590;
+	line-height:40px;
+}
+
+
+.anzhuang{height:90px;line-height:90px;font-size:16px;}
+
+
+
+
+
+
+
+
+
+
+
+
+

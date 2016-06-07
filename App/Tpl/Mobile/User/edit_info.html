@@ -1,0 +1,50 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+	<meta charset="utf-8">
+	<title></title>
+	<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+	<meta name="description" content=""/>
+	<script type="text/javascript">
+    //实例化编辑器
+	window.UEDITOR_UPLOAD_URL = "{:U('file/editor')}";
+	</script>
+	<!-- <script type="text/javascript" charset="utf-8" src="__PUBLIC__/ueditor/ueditor.config.js"></script>
+	<script type="text/javascript" charset="utf-8" src="__PUBLIC__/ueditor/ueditor.all.js"> </script>
+	<script type="text/javascript" charset="utf-8" src="__PUBLIC__/ueditor/lang/zh-cn/zh-cn.js"></script> -->
+	
+	<script type="text/javascript" charset="utf-8" src="ueditor.config.js"></script>
+	<script type="text/javascript" charset="utf-8" src="ueditor.all.js"> </script>
+	<script type="text/javascript" charset="utf-8" src="zh-cn.js"></script>
+</head>
+<body>
+<style>
+	.edui-editor{width:100%;}
+	#edui1_toolbarbox{display:none;}
+	#edui1_wordcount{display:none;}
+</style>
+<div style="width:100%;">
+	<form action="{:U('log/mylog_edit')}" method="post">
+		<input type="hidden" name="log_id" value="{$log_info.log_id}"/>
+		<table class="table" width="95%" border="0" cellspacing="1" cellpadding="0">
+			<tbody width="100%">
+				<tr>
+					<td style="width:96%;margin:0 auto;" >
+						<script id="editor" name="content" class="span12" type="text/plain" style="width:100%;height:300px;">{$log_info.content}</script>
+					</td>
+				</tr>
+			</tbody>
+			<tfoot>
+				<tr>
+					<td><input name="submit" class="btn btn-primary" type="submit" value="提交"/></td>
+				</tr>
+			</tfoot>
+		</table>
+	</form>
+</div>
+<script type="text/javascript">
+    var ue = UE.getEditor('editor');
+</script>
+</body>
+</html>

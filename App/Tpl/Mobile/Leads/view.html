@@ -1,0 +1,170 @@
+<html xmlns="http://www.w3.org/1999/xhtml">
+	<head>
+		<meta charset="utf-8">
+		<title>{:C('defaultinfo.name')} - Powered By {:L('AUTHOR')}</title>
+		<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+		<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+		<meta name="description" content=""/>
+		<meta name="author" content="{:L('AUTHOR')}"/>
+		<link type="text/css" href="__PUBLIC__/css/app.css" rel="stylesheet" />
+		<link rel="shortcut icon" href="__PUBLIC__/ico/favicon.png"/>
+		<script src="__PUBLIC__/js/jquery-1.9.0.min.js" type="text/javascript"></script>
+		<style>
+			.inright{width:70%;}
+			.itext{text-overflo:none;}
+		</style>
+	</head>
+	<body>
+		<div class="title">
+			<img id="img" src="__PUBLIC__/appImg/title_bg.jpg" />
+			<div class="title1">{$leads['name']}</div>
+		</div>
+		<div class="top">
+			<div class="line"></div>
+				<ul class="relevant">
+					<li class="ta" rel="1" style="width:50%" >
+						<dl>
+							<dt><div class="item item1"></div></dt>
+							<dd><span class="count_num1">基本信息</span></dd>
+						</dl>
+					</li>
+					<li class="ta" rel="2" style="width:50%" >
+						<dl>
+							<dt><div class="item item4"></div></dt>
+							<dd><span class="count_num">沟通日志（{$leads['log_count']}）</span></dd>
+						</dl>
+					</li>
+				</ul>
+			<div class="shadow"></div>
+		</div>
+		<div class="zhong "></div>
+		<div class="content">
+			<div class="ta1">
+				<div class="shang">
+					<table class="table">
+						<tbody>
+							<tr><th colspan="2">基本信息</th></tr>
+							<tr>
+								<td colspan="2">
+									<table width="100%">
+										<tr>
+											<td class="tdleft">创建时间：</td>
+											<td class="tdright"><if condition="$leads['create_time'] neq 0">{$leads.create_time|date='Y-m-d H:i:s',###}</if></td>
+										</tr>
+									</table>
+								</td>
+							</tr>
+							<tr>
+								<td colspan="2">
+									<table width="100%">
+										<tr>
+											<td class="tdleft">创建人：</td>
+											<td class="tdright"><a class="role_info" href="role_name:{$leads.creator.role_id}">{$leads.creator.user_name}</a></td>
+										</tr>
+									</table>
+								</td>
+							</tr>
+							<tr>
+								<td colspan="2">
+									<table width="100%">
+										<tr>
+											<td class="tdleft">负责人：</td>
+											<td class="tdright"><a class="role_info" href="role_name:{$leads.owner.role_id}">{$leads.owner.user_name}</a></td>
+										</tr>
+									</table>
+								</td>
+							</tr>
+							<tr>
+								<td colspan="2">
+									<table width="100%">
+										<tr>
+											<td class="tdleft" >最后修改时间：</td>
+											<td class="tdright"><if condition="$leads['update_time'] gt 0">{$leads.update_time|date='Y-m-d H:i:s',###}</if></td>
+										</tr>
+									</table>
+								</td>
+							</tr>
+							<tr>
+								<td class="tdleft"></td>
+								<td></td>
+							</tr>
+						</tbody>
+					</table>
+				</div>
+				<div class="zhong"></div>
+				<div class="shang">
+					<table class="table">
+						<tbody>
+							<tr><th colspan="2">其他信息</th></tr>
+							<volist name="field_list" id="vo">
+								<tr>
+									<td class="tdleft" >{$vo.name}：</td>
+									<if condition = "$leads[$vo['field']] neq ''">
+										<if condition="$vo['form_type'] eq 'datetime'">
+											<td class="tdright"><if condition = "$leads[$vo['field']] neq 0">{$leads[$vo['field']]|date='Y-m-d',###}</if></td>
+										<elseif condition = "$vo['form_type'] eq 'editor'" />
+											<td class="tdright">--暂不支持该类型--</td>
+										<else />
+										<td class="tdright">{$leads[$vo['field']]}</td>
+										</if>
+									<else />
+										<td class="tdright"></td>
+									</if>
+								</tr>
+							</volist>
+						</tbody>
+					</table>
+				</div>
+			</div>
+		</div>
+		<div class="zong2 ta2">
+			<volist name="leads['log']" id="log">
+				<div class="log_item">
+					<div class="ipic">
+						<img <if condition="$log[owner][img]">src="{$log[owner][img]}"<else/>src="__PUBLIC__/ico/logo.jpg"</if> style="width: 60px;height: 60px;box-shadow: 0 1px 3px;border-radius: 0px;"/>
+					</div>
+					<div class="inright">
+						<div class="iname"><notempty name="log['owner']['user_name']"><a class="role_info" rel="{$log.owner.role_id}" href="javascript:void(0)">{$log[owner][user_name]}</a></notempty>&nbsp;</div>
+						<div class="zhi">[{$log[owner][role_name]}-{$log[owner][department_name]}]</div>
+						<div class="itime">{$log.create_date|date='Y-m-d H:i:s',###}</div>
+						<if condition="strlen($log['content']) gt 100">
+							<div class="itext" id="slog_{$log.log_id}">
+								{$log.content|msubstr=###,0,30}<br/><a class="more" rel="{$log.log_id}" href="javascript:void(0)">全文</a>
+							</div>
+							<div class="itext" id="llog_{$log.log_id}" style="display:none;">
+								{$log.content}
+							</div>
+						<else/>
+							<div class="itext">{$log.content}</div>
+						</if>
+					</div>
+				</div>
+				<div class="zhong"></div>
+			</volist>
+		</div>
+	</body>
+	<script type="text/javascript">
+			$('.ta').click(
+				function(){
+					var num = $(this).attr('rel');
+					for (var i=1;i<3;i++){
+						if(num == i){
+							$('.ta'+i).show();
+							$('.ta[rel='+i+'] .item').addClass('item_bg_active');
+							$('.ta[rel='+i+'] span').css('color','#369FE2');
+						}else{
+							$('.ta'+i).hide();
+							$('.ta[rel='+i+'] .item').removeClass('item_bg_active');
+							$('.ta[rel='+i+'] span').css('color','#878787');
+						}
+					}
+				}
+			);
+			$(".more").click(function(){
+				$(this).hide();
+				var log_id = $(this).attr('rel');
+				$('#llog_'+log_id).show();
+				$('#slog_'+log_id).hide();
+			});
+	</script>
+</html>

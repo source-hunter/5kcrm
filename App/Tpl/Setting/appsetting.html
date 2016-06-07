@@ -1,0 +1,20 @@
+<include file="Public:header" />
+<div class="container">
+	<div class="page-header">
+		<h4>{:L('SYSTEM_SETTING')}</h4>
+	</div>
+	<include file="Public:alert" />	
+	<div class="tabbable">
+		<ul class="nav nav-tabs">
+			<li><a href="{:U('setting/defaultInfo')}">{:L('BASIC_SYSTEM_SETTING')}</a></li>
+			<li><a href="{:U('setting/smtp')}">{:L('SMTP_SETTING')}</a></li>
+			<li><a href="{:U('setting/fields')}">{:L('CUSTOMIZING_FIELDS_SETTING')}</a></li>		
+			<li><a href="{:U('navigation/setting')}">{:L('SYSTEM_NAVIGATION_SETTING')}</a></li>
+			<li class="active"><a href="{:U('setting/appsetting')}">APP接口配置</a></li>
+		</ul>
+		<div class="row" style="margin-left:0px;">
+			<iframe runat="server" src="http://www.5kcrm.com/index.php?m=server&a=login" width="100%" height="1100px" scrolling="no" frameborder="0"></iframe>
+		</div>
+	</div> <!-- End #main-content -->
+</div>
+<include file="Public:footer" />	

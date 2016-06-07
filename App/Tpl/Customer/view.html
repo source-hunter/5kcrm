@@ -1,0 +1,894 @@
+<include file="Public:header" />
+<div class="container no-mar-top no-bg" >
+<div class="row" >
+    <div class="span2 bs-docs-sidebar mar-left3" >
+        <ul class="nav-list bs-docs-sidenav span2 widths" id="left_list" style="list-style:none">
+            <li class="first-li"><span class="spans1"><img src="__PUBLIC__/img/house.png"/>&nbsp;<if condition="$customer_len gt 10">{:msubstr($customer['name'], 0, 10)}<else/>{$customer['name']}</if></span></li>
+            <li class="active"><a href="#tab1" >基本信息</a></li>
+            <li><a href="#tab3">{:L('COMMUNICATION_LOGS')}&nbsp;&nbsp;<span class="badge badge-success"><if condition="$customer['log_count']">{$customer['log_count']}</if></span></a></li>
+            <li><a href="#tab10">{:L('BUSINESS_HISTORY')}&nbsp;&nbsp;<span class="badge badge-success"><if condition="$customer['business_count']">{$customer['business_count']}</if></span></a></li>
+            <li><a href="#tab12">{:L('CUMTOMER_CARE')}&nbsp;&nbsp;<span class="badge badge-success"><if condition="$customer['cares_count']">{$customer['cares_count']}</if></span></a></li>
+            <li><a href="#tab7">{:L('BUY_THE_PRODUCT')}&nbsp;&nbsp;<span class="badge badge-success"><if condition="$customer['product_count']">{$customer['product_count']}</if></span></a></li>
+            <li><a href="#tab11">{:L('CONTRACT')}&nbsp;&nbsp;<span class="badge badge-success"><if condition="$customer['contract_count']">{$customer['contract_count']}</if></span></a></li>
+            <li><a href="#tab8">{:L('THE_ACCOUNTS_RECEIVABLE')}&nbsp;&nbsp;<span class="badge badge-success"><if condition="$customer['receivables_count']">{$customer['receivables_count']}</if></span></a></li>
+            <li><a href="#tab9">{:L('The_accounts_payable')}&nbsp;&nbsp;<span class="badge badge-success"><if condition="$customer['payables_count']">{$customer['payables_count']}</if></span></a></li>
+            <li><a href="#tab5">{:L('TASK')}&nbsp;&nbsp;<span class="badge badge-success"><if condition="$customer['task_count']">{$customer['task_count']}</if></span></a></li>
+            <li><a href="#tab6">{:L('SCHEDULE')}&nbsp;&nbsp;<span class="badge badge-success"><if condition="$customer['event_count']">{$customer['event_count']}</if></span></a></li>
+            <li><a href="#tab4">{:L('FILE')}&nbsp;&nbsp;<span class="badge badge-success"><if condition="$customer['file_count']">{$customer['file_count']}</if></span></a></li>
+        </ul>
+    </div>
+    <div class="tab-content span8 mar-lefts contenr_width">
+        <div class="tab-pane fade in active" id="tab1">
+			<div class="container2 top-pad">
+				<a class="basic_information" name="tab">{:L('BASIC_INFORMATION')}</a>
+				<div class="pull-right"style="margin:-3px 10px 0 0;">
+				<if condition="($Think.get.content neq 'resource') and ($customer['is_deleted'] eq 0)">
+					<php>$focus_id = M('CustomerFocus')->where('user_id =%d and customer_id=%d',session('role_id'),$customer['customer_id'])->getField('focus_id');</php>
+					<if condition="$focus_id">
+						<a href="{:U('customer/batchclose', 'customer_id='.$customer['customer_id'])}" class="btn btn-primary">取消关注</a>
+					<else/>
+						<a href="{:U('customer/batchfocus', 'customer_id='.$customer['customer_id'])}" class="btn btn-primary">关注</a>
+					</if>
+				<?php
+					$share_id = M('CustomerShare')->where('share_role_id =%d and customer_id=%d',session('role_id'),$customer['customer_id'])->getField('share_id');
+					$by_sharing_ids = M('CustomerShare')->where('customer_id=%d',$customer['customer_id'])->getField('by_sharing_id',true);
+					if(!in_array(session('role_id'),explode(',',implode(',',$by_sharing_ids)))||$share_id)
+					{
+				?>
+						<if condition="$share_id">
+							<a href="{:U('customer/close_share', 'customer_id='.$customer['customer_id'])}" class="btn btn-primary">取消分享</a>
+						<else/>
+							<a id="share" href="javascript:void(0)" class="btn btn-primary">分享</a>
+						</if>
+				<?php }	?>
+				</if>
+				<?php
+					if(!in_array(session('role_id'),explode(',',implode(',',$by_sharing_ids)))||$share_id){
+				?>
+					<a href="{:U('customer/edit', 'id='.$customer['customer_id'])}" class="btn btn-primary">{:L('EDIT')}</a>
+					<a href="{:U('customer/delete','id='.$customer['customer_id'])}" class="btn btn-primary del_confirm">{:L('DELETE')}</a>
+				<?php }	?>
+					<a href="javascript:void(0)" class="btn btn-primary" onclick="javascript:history.go(-1)">{:L('RETURN')}</a>
+				</div>
+			</div>
+            <div class="back_box" style="margin-top:10px;">
+                <include file="Public:alert"/>
+                <table class="table table-hover">
+                    <tbody>
+                        <tr>
+                            <td class="tdleft" width="15%">{:L('CREATION_TIME')}</td>
+                            <td><if condition="$customer['create_time'] neq 0">{$customer.create_time|date='Y-m-d H:i:s',###}</if></td>
+                            <td class="tdleft">{:L('FOUNDER')}</td>
+                            <td><a class="role_info" href="javascript:void(0)" rel="{$customer.create.role_id}">{$customer.create.user_name}</if></a></td>
+                        </tr>
+                        <if condition="$customer['is_deleted'] eq 1">
+                        <tr>
+                            <td class="tdleft">{:L('DELETE_THE_PEOPLE')}</td>
+                            <td><a class="role_info" href="javascript:void(0)" rel="{$customer.deleted.role_id}">{$customer.deleted.user_name}</a></td>
+                            <td class="tdleft" width="15%">{:L('DELETE_THE_TIME')}</td>
+                            <td>{$customer.delete_time|date='Y-m-d H:i:s',###}</td>
+                        </tr>
+                        </if>
+                        <tr>
+                            <td class="tdleft">{:L('PRINCIPAL')}</td>
+                            <td><a class="role_info" href="javascript:void(0)" rel="{$customer.owner.role_id}">{$customer.owner.user_name}</if></a> &nbsp;  &nbsp; <a href="{:U('customer/customerlock','customer_id='.$customer['customer_id'])}"><if condition="$customer['is_locked'] and $customer['owner_role_id']"><img title="{:L('UNLOCK_TITLE')}" src="__PUBLIC__/img/customer_locking.png"/><elseif condition="$customer['owner_role_id']"/><img title="{:L('LOCK_TITLE')}" src="__PUBLIC__/img/customer_unlocking.png"/></if></a></td>
+                            <td class="tdleft" width="15%">{:L('THE_LAST_MODIFICATION_TIME')}</td>
+                            <td><if condition="$customer['update_time'] gt 0">{$customer.update_time|date='Y-m-d H:i:s',###}</if></td>
+                        </tr>
+                        <tr>
+                            <td class="tdleft" width="15%">{:L('THE_PRIMARY_CONTACT')}</td>
+                            <td><a href="{:U('contacts/view','id='.$customer[contacts_id])}">{$customer[contacts_name]}</td>
+                        <php>$j=0;</php>
+                        <volist name="field_list" id="vo">
+                        <php>$j++;</php>
+                        <if condition="$vo['form_type'] == 'textarea' or $vo['form_type'] == 'editor'">
+                            <if condition="$i%2 != 0">
+                            <td colspan="2">&nbsp;</td>
+                            </tr>
+                            </if>
+                            <tr>
+                                <td class="tdleft" width="15%">{$vo.name}:</td>
+                                <td colspan="3" style="word-break:break-word;">{$customer[$vo['field']]}</td>
+                            </tr>
+                            <if condition="$i%2 == 0 && count($field_list) != $j">
+                            <php>$i++;</php>
+                            </if>
+                        <else/>
+                            <if condition="$i%2 == 0">
+                            <tr>
+                            </if>
+                                <td class="tdleft" width="15%">{$vo.name}:</td>
+                                <td width="35%">
+                                    <span style="color:#{$vo['color']}">
+                                    <if condition="$vo['form_type'] eq 'datetime'">
+                                        <if condition="$customer[$vo['field']] gt 0">{$customer[$vo['field']]|date='Y-m-d',###}</if>
+                                    <elseif condition="$vo['form_type'] eq 'address'" />
+                                        {$customer[$vo['field']]}
+                                        <a href="javascript:void(0);" class="getMap" rel="{$customer[$vo['field']]}">
+                                            <img src="__PUBLIC__/img/location.png" style="height:20px; vertical-align: text-bottom;">
+                                        </a>
+                                    <else />
+                                        {$customer[$vo['field']]}
+                                    </if>
+                                    </span>
+                                </td>
+                            <if condition="$i%2 != 0">
+                            </tr>
+                            </if>
+                            <if condition="$i%2 == 0 && count($field_list) == $j">
+                                <td colspan="2">&nbsp;</td>
+                            </tr>
+                            </if>
+                        </if>
+                        </volist>
+                    </tbody>
+                </table>
+            </div>
+			
+			<div class="back_box" style="margin-top: 10px;">
+				<div class="header1">
+					<div class="pull-left two-title" >{:L('LINKMAN')}</div>
+					<div class="pull-right"> <if condition="$customer['is_deleted'] == 0"><a href="{:U('contacts/add','redirect=customer&customer_id='.$customer['customer_id'])}" class=" btn btn-primary">{:L('ADD')}</a></if></div>
+					<div style="clear:both;"></div>
+				</div>
+				<table class="table table-hover">
+					<if condition="$customer.contacts eq null">
+						<tr>
+							<td <if condition="C('ismobile') neq 1">colspan="6"<else/>colspan="4"</if>>{:L('THERE_IS_NO_DATA')} </td>
+						</tr>
+					<else /> 
+						<tr>
+							<td width="18%">&nbsp;</td>
+							<td width="20%">{:L('NAME')}</td>
+							<td width="10%">职位</td>
+							<td width="10%">{:L('CELLPHONE')}</td>
+							<td width="10%">QQ</td>
+							<td width="16%">email</td>
+						</tr>
+						<volist name="customer['contacts']" id="vo">
+							<tr>
+								<td class="tdleft" >
+									<if condition="$customer['is_deleted'] == 0"><a href="{:U('contacts/view', 'id='.$vo['contacts_id'])}">{:L('CHECK')}</a> &nbsp;<a href="{:U('contacts/edit', 'id='.$vo['contacts_id'].'&redirect=customer&redirect_id='.$customer['customer_id'])}">{:L('COMPILE')}</a>&nbsp;
+									<a href="{:U('contacts/mdelete', 'id='.$vo['contacts_id'].'&r=rContactsCustomer&module_id='.$customer['customer_id'])}" class="del_confirm">{:L('DELETE')}</a>&nbsp;
+									<a href="{:U('contacts/changeToFirstContact', 'id='.$vo['contacts_id'].'&customer_id='.$customer['customer_id'])}">{:L('SET_AS_PRIMARY')}</a>
+									</if>
+								</td>
+								<td>
+									{$vo.name}<if condition="$vo['is_firstContact'] eq 'true'"> &nbsp;<span style="color:red;">( {:L('THE_PRIMARY_CONTACT')} )</span></if>{$vo.saltname}
+								</td>
+								<td>
+									<if condition="C('ismobile') eq 1"><a href="tel:{$vo.post}">{$vo.telephone}</a><else />{$vo.post}</if>
+								</td>
+								<td>
+									<if condition="C('ismobile') eq 1"><a href="tel:{$vo.telephone}">{$vo.telephone}</a><else />{$vo.telephone}</if>
+								</td>
+								 <td>
+									<if condition="C('ismobile') eq 1"><a href="qq:{$vo.qq_no}">{$vo.qq_no}</a><else />{$vo.qq_no}</if>
+								</td>
+								<td>
+									<if condition="C('ismobile') eq 1"><a href="mailto:{$vo.email}">{$vo.email}</a><else />{$vo.email}</if>
+								</td>
+							</tr>
+						</volist>
+					</if>
+				</table>
+			</div>	
+        </div>
+        <div class="tab-pane fade back_box" id="tab3">
+			<div class="header1">
+				<div class="pull-left two-title" > {:L('COMMUNICATION_LOGS')} </div>
+				<div class="pull-right"> <a class="add_log btn btn-primary" href="javascript:void(0);" >{:L('ADD')}</a></div>
+				<div style="clear:both;"></div>
+			</div>
+            <table class="table table-hover">
+                <if condition="$customer.log eq null">
+                    <div>
+                        {:L('THERE_IS_NO_DATA')}
+                    </div>
+                <else />
+                    <volist name="customer.log" id="vo">
+                        <div class="caption">
+                             {$vo.subject}
+                        </div>
+                        <div class="mar-left2">
+							<if condition="strlen($vo['content']) gt 100">
+								<div id="slog_{$vo.log_id}" class="pad-right3" >
+									{$vo.content|msubstr=###,0,100}
+										<a class="more" rel="{$vo.log_id}" href="javascript:void(0)">{:L('READ_MORE')}</a>
+								</div>
+								<div id="llog_{$vo.log_id}"  class="hide">
+									<div class="pad-right3 pres" >{$vo.content}</div>
+								</div>
+							<else/>
+							 <div class="pad-right3"> {$vo.content}</div>
+							</if>
+                        </div>
+						<div class="editors">
+							<if condition="$customer['is_deleted'] neq 1"><a href="javascript:void(0)" rel="{$vo.log_id}" class="edit_log">{:L('COMPILE')}</a>&nbsp; <a href="{:U('log/delete','r=RCustomerLog&id='.$vo['log_id'])}" class="del_confirm">{:L('DELETE')}</a></if>&nbsp;&nbsp;&nbsp;&nbsp;
+							<notempty name="vo.owner.user_name"><img style="margin-top:-3px;" src="__PUBLIC__/img/user.png">&nbsp;<a class="role_info name-colors"  rel="{$vo.owner.role_id}" href="javascript:void(0)">{$vo.owner.user_name}</a></notempty> &nbsp; 
+							<img src="__PUBLIC__/img/time_annoce.png"/>&nbsp;<span class=" name-colors" >{$vo.update_date|date="Y-m-d  H:i:s",###}</span> &nbsp; 
+							<notempty name="vo.create_date"> &nbsp; </notempty>
+							<if condition="C('ismobile') eq 1"><br/></if>
+						</div>
+                    </volist>
+                </if>
+            </table>
+        </div>
+     
+        <div class="tab-pane fade back_box" id="tab10">
+			<div class="header1">
+				<div class="pull-left two-title" >{:L('BUSINESS_HISTORY')}</div>
+				<div class="pull-right"><if condition="$customer['is_deleted'] == 0"><a class="btn btn-primary" href="{:U('business/add','customer_id='.$customer['customer_id'])}" >{:L('add')}</a></if></div>
+				<div style="clear:both;"></div>
+			</div>
+            <table class="table table-hover">
+                <if condition="$customer.business eq null">
+                    <tr>
+                        <td <if condition="C('ismobile') neq 1">colspan="5"<else/>colspan="4"</if>>{:L('THERE_IS_NO_DATA')} </td>
+                    </tr>
+                <else /> 
+                    <tr>
+                        <td width="15%">&nbsp;</td>
+                        <td>{:L('BUSINESS_NAME')}</td>
+                        <td>{:L('STATE')}</td>
+                        <td>{:L('PRINCIPAL')}</td>
+                        <if condition="C('ismobile') neq 1"><td>{:L('creation_time')}</td></if>
+                    </tr>
+                    <volist name="customer.business" id="vo">
+                        <tr>
+                            <td class="tdleft" >
+                                <if condition="$customer['is_deleted'] == 0"><a href="{:U('business/view', 'id='.$vo['business_id'])}">{:L('CHECK')}</a> &nbsp;<a href="{:U('business/edit', 'id='.$vo['business_id'])}">{:L('COMPILE')}</a></if>
+                            </td>
+                            <td>
+                                <a href="{:U('business/view', 'id='.$vo['business_id'])}">{$vo.name}</a>
+                            </td>
+                            <td>
+                                {$vo.status}
+                            </td>										
+                            <td>
+                                <notempty name="vo.owner.user_name">
+                                <a class="role_info" rel="{$vo.owner.role_id}" href="javascript:void(0)">{$vo.owner.user_name}</a>
+                                </notempty>
+                            </td>
+                            <if condition="C('ismobile') neq 1">
+                                <td>
+                                    <if condition="$vo['create_time'] gt 0">{$vo.create_time|date="Y-m-d",###}</if>
+                                </td>
+                            </if>
+                        </tr>
+                    </volist>
+                </if>
+            </table>
+        </div>
+        <div class="tab-pane fade back_box" id="tab12">
+			<div class="header1">
+				<div class="pull-left two-title" >{:L('CUMTOMER_CARE')}</div>
+				<div class="pull-right"><a class="btn btn-primary" href="{:U('customer/caresadd','customer_id='.$customer['customer_id'])}" >{:L('ADD')}</a></div>
+				<div style="clear:both;"></div>
+			</div>
+            <table class="table table-hover">
+                <empty name="customer['cares']">
+                    <tr>
+                        <td colspan="5">{:L('THERE_IS_NO_DATA')} </td>
+                    </tr>
+                <else /> 
+                    <tr>
+                        <td width="15%">&nbsp;</td>
+                        <td>{:L('CARE_THEME')}</td>
+                        <td>{:L('DATE_OF_CARE')}</td>
+                        <td>{:L('TYPE')}</td>
+                        <td>{:L('PRINCIPAL')}</td>
+                    </tr>
+                    <volist name="customer.cares" id="vo">
+                        <tr>
+                            <td class="tdleft">
+                                <a href="{:U('customer/caresview','id='.$vo['care_id'])}">{:L('CHECK')}</a>&nbsp; <a href="{:U('customer/caresdelete','id='.$vo['care_id'])}" class="del_confirm">{:L('DELETE')}</a>
+                            </td>
+                            <td>
+                                {$vo.subject}
+                            </td>
+                            <td>
+                                <present name="vo.care_time">{$vo.care_time|date="Y-m-d H:i:s",###}</present>
+                            </td>
+                            <td>
+                                <if condition="$vo['type'] == 'message'">
+                                    {:L('NOTE')}
+                                <elseif condition="$vo['type'] == 'phone'"/>
+                                    {:L('PHONE')}
+                                <elseif condition="$vo['type'] == 'email'"/>
+                                    {:L('EMAIL')}
+                                <elseif condition="$vo['type'] == 'other'"/>
+                                    {:L('OTHER')}
+                                <else/>
+                                    {:L('NONE')}
+                                </if>
+                            </td>
+                            <td>
+                                <notempty name="vo.to_name">{$vo.to_name}</notempty>
+                            </td>
+                        </tr>
+                    </volist>
+                </empty>
+            </table>
+        </div>
+        <div class="tab-pane fade back_box" id="tab7">
+			<div class="header1">
+				<div class="pull-left two-title" >{:L('BUY_THE_PRODUCT')}</div>
+				<div style="clear:both;"></div>
+			</div>
+            <table class="table table-hover">
+                <if condition="$customer.product eq null">
+                    <tr>
+                        <td colspan="6">{:L('THERE_IS_NO_DATA')} </td>
+                    </tr>
+                <else /> 
+                <thead>
+                    <tr>
+                        <td width="15%">&nbsp;</td>
+                        <td>{:L('PRODUCT_NAME')}</td>
+                        <td>{:L('CLINCH_A_DEAL_VALENCE')}</td>
+                        <td>{:L('QUANTITY')}</td>
+                        <td>{:L('THE_COST_PRICE')}</td>
+                        <if condition="C('ismobile') neq 1"><td width="30%">{:L('REMARK')}</td></if>
+                    </tr>
+                </thead>
+                <tbody>
+                    <volist name="customer.product" id="vo">
+                        <tr>
+                            <td class="tdleft"><a href="{:U('product/view', 'id='.$vo['product_id'])}">{:L('CHECK')}</a></td>
+                            <td>
+                                <a href="{:U('product/view', 'id='.$vo['product_id'])}">{$vo.name}</a>
+                            </td>
+                            <td>
+                                <if condition="$vo['sales_price'] gt 0">{$vo.sales_price}</if>
+                            </td>
+                            <td>
+                                <if condition="$vo['amount'] gt 0">{$vo.amount}</if>
+                            </td>
+                            <td>
+                                <if condition="$vo['cost_price'] gt 0">{$vo.cost_price}</if>
+                            </td>
+                            <if condition="C('ismobile') neq 1"><td>
+                                {$vo.description}
+                            </td></if>
+                        </tr>
+                    </volist>
+                    <tr>
+                </tr>
+                </tbody>
+                </if>
+            </table>
+        </div>
+        <div class="tab-pane fade back_box" id="tab11">
+			<div class="header1">
+				<div class="pull-left two-title" >{:L('THE_RELEVANT_CONTRACT')}</div>
+				<div class="pull-right">
+					<if condition="$business['is_deleted'] == 0">
+						<a class="btn btn-primary" href="{:U('contract/add')}">{:L('ADD')}</a>
+					</if>
+				</div>
+				<div style="clear:both;"></div>
+			</div>
+            <table class="table table-hover">
+                <if condition="$customer['contract'] eq null">
+                    <tr>
+                        <td <if condition="C('ismobile') neq 1">colspan="6"<else />colspan="4"</if>>{:L('THERE_IS_NO_DATA')}</td>
+                    </tr>
+                <else /> 
+                    <tr>
+                        <td>&nbsp;</td>
+                        <td>{:L('Contract_no')}</td>
+                        <td>{:L('SIGNING_TIME')}</td>
+                        <td>{:L('OFFER')}</td>
+                        <if condition="C('ismobile') neq 1"><td>{:L('PRINCIPAL')}</td>
+                        <td>{:L('CREATION_TIME')}</td></if>
+                    </tr>
+                    <volist name="customer.contract" id="vo">
+                        <tr>
+                            <td class="tdleft"><if condition="$customer['is_deleted'] == 0"><a  href="{:U('contract/view','id='.$vo['contract_id'])}">{:L('CHECK')}</a> &nbsp; <a  href="{:U('contract/edit','id='.$vo['contract_id'])}">{:L('COMPILE')}</a></if></td>
+                            <td>
+                                <a  href="{:U('contract/view','id='.$vo['contract_id'])}">{$vo.number}</a>
+                            </td>									
+                            <td><notempty name="vo.due_time">{$vo.due_time|date="Y-m-d",###}</notempty></td>
+                            <td>
+                                {$vo.price}
+                            </td>
+                            <if condition="C('ismobile') neq 1">
+                            <td>
+                                <notempty name="vo.owner.user_name"><a class="role_info" rel="{$vo.owner.role_id}" href="javascript:void(0)">{$vo.owner.user_name}</a></notempty>
+                            </td>
+                            <td><notempty name="vo.create_time">{$vo.create_time|date="Y-m-d  H:i:s",###}</notempty></td>
+                            </if>
+                        </tr>
+                    </volist>
+                </if>
+            </table>
+        </div>
+        <div class="tab-pane fade back_box" id="tab8">
+			<div class="header1">
+				<div class="pull-left two-title" >{:L('THE_ACCOUNTS_RECEIVABLE')}</div>
+				<div class="pull-right">
+				<if condition="$customer.receivables neq null">
+					<if condition="$customer['is_deleted'] == 0"><a class="btn btn-primary" href="{:U('finance/add','t=receivables')}">{:L('ADD')}</a></if>
+				</if>
+				</div>
+				<div style="clear:both;"></div>
+			</div>
+            <table class="table table-hover">
+                <if condition="$customer.receivables eq null">
+                    <tr>
+                        <td <if condition="C('ismobile') neq 1">colspan="6"<else/>colspan="4"</if>>{:L('THERE_IS_NO_DATA')} </td>
+                    </tr>
+                <else /> 
+                <thead>
+                    <tr>
+                        <td width="15%">&nbsp;</td>
+                        <td>{:L('THE_ACCOUNTS_RECEIVABLE_ACCOUNTS_RECEIVABLE')}</td>
+                        <td>{:L('CONTRACT')}</td>
+                        <td>{:L('STATE')}</td>
+                        <if condition="C('ismobile') neq 1">
+                        <td>{:L('MONEY')}</td>
+                        <td>{:L('PRINCIPAL')}</td>
+                        </if>
+                    </tr>
+                </thead>
+                <tbody>
+                    <volist name="customer.receivables" id="vo">
+                        <tr>
+                            <td class="tdleft"><a href="{:U('finance/view', 't=receivables&id='.$vo['receivables_id'])}" >{:L('CHECK')}</a></td>
+                            <td>
+                                <a href="{:U('finance/view', 't=receivables&id='.$vo['receivables_id'])}" >{$vo.name}</a>
+                            </td>
+                            <td>
+                                <a href="{:U('contract/view', 'id='.$vo['contract_id'])}" >{$vo.contract_name}</a>
+                            </td>
+                            <td>
+                                <if condition="$vo['status'] eq 2">{:L('HAS_BEEN_RECEIVING')}<elseif condition="$vo['status'] eq 1" />{:L('PART_OF_THE_RECEIVED')}<else />{:L('DID_NOT_RECEIVE_PAYMENT')}</if>
+                            </td>
+                            <if condition="C('ismobile') neq 1">
+                            <td>
+                                <if condition="$vo['price'] gt 0">{$vo.price}</if>
+                            </td>
+                            <td>
+                                <notempty name="vo.owner.user_name">
+                                <a class="role_info" rel="{$vo.owner.role_id}" href="javascript:void(0)">{$vo.owner.user_name}</a>
+                                </notempty>
+                            </td>
+                            </if>
+                        </tr>
+                    </volist>
+                </tbody>
+            </if>
+            </table>
+        </div>
+        <div class="tab-pane fade back_box" id="tab9">
+			<div class="header1">
+				<div class="pull-left two-title" >{:L('The_accounts_payable')}</div>
+				<div class="pull-right">
+				<if condition="$customer.payables neq null">
+					<if condition="$customer['is_deleted'] == 0"><a  href="{:U('finance/add','t=payables')}" >{:L('ADD')}</a></if>
+				</if>
+				</div>
+				<div style="clear:both;"></div>
+			</div>
+            <table class="table table-hover">
+                <if condition="$customer.payables eq null">
+                    <tr>
+                        <td <if condition="C('ismobile') neq 1">colspan="6"<else/>colspan="4"</if>>{:L('THERE_IS_NO_DATA')} </td>
+                    </tr>
+                <else /> 
+                <thead>
+                    <tr>
+                        <td width="15%">&nbsp;</td>
+                        <td>{:L('The_accounts_payable')}</td>
+                        <td>{:L('CONTRACT')}</td>
+                        <td>{:L('STATE')}</td>
+                        <if condition="C('ismobile') neq 1">
+                        <td>{:L('MONEY')}</td>
+                        <td>{:L('PRINCIPAL')}</td>
+                        </if>
+                    </tr>
+                </thead>
+                <tbody>
+                    <volist name="customer.payables" id="vo">
+                        <tr>
+                            <td class="tdleft"><a href="{:U('finance/view', 't=payables&id='.$vo['payables_id'])}" >{:L('CHECK')}</a></td>
+                            <td>
+                                <a href="{:U('finance/view', 't=payables&id='.$vo['payables_id'])}" >{$vo.name}</a>
+                            </td>
+                            <td>
+                                <a href="{:U('contract/view', 'id='.$vo['contract_id'])}" >{$vo.contract_name}</a>
+                            </td>
+                            <td>
+                                <if condition="$vo['status'] eq 2">{:L('Payment_has_been')}<elseif condition="$vo['status'] eq 1" />{:L('PART_OF_THE_RECEIVED')}<else />{:L('DID_NOT_RECEIVE_PAYMENT')}</if>
+                            </td>
+                            <if condition="C('ismobile') neq 1">
+                            <td>
+                                <if condition="$vo['price'] gt 0">{$vo.price}</if>
+                            </td>
+                            <td>
+                                <notempty name="vo.owner.user_name">
+                                <a class="role_info" rel="{$vo.owner.role_id}" href="javascript:void(0)">{$vo.owner.user_name}</a>
+                                </notempty>
+                            </td>
+                            </if>
+                        </tr>
+                    </volist>
+                </tbody>
+                </if>
+            </table>
+        </div>
+        <div class="tab-pane fade back_box" id="tab5">
+			<div class="header1">
+				<div class="pull-left two-title" >{:L('Related_tasks')}</div>
+				<div class="pull-right">
+					<if condition="$customer['is_deleted'] == 0"><a href="javascript:void(0);" class="add_task btn btn-primary">{:L('ADD')}</a></if>
+				</div>
+				<div style="clear:both;"></div>
+			</div>
+            <table class="table table-hover">
+                <if condition="$customer.task eq null">
+                    <tr>
+                        <td <if condition="C('ismobile') neq 1">colspan="6"<else />colspan="4"</if>>{:L('THERE_IS_NO_DATA')} </td>
+                    </tr>
+                <else /> 
+                    <tr>
+                        <td width="15%">&nbsp;</td>
+                        <td>{:L('THEME')}</td>
+                        <td>{:L('STATE')}</td>
+                        <td>负责人</td>
+                        <td>任务相关人</td>
+                        <if condition="C('ismobile') neq 1"><td>{:L('MODIFICATION_TIME')}</td>
+                        <td>{:L('DUE_DATE')}</td></if>
+                    </tr>
+                    <volist name="customer.task" id="vo">
+                        <tr>
+                            <td class="tdleft">
+                                <if condition="$customer['is_deleted'] == 0"><a href="{:U('task/view','id='.$vo['task_id'])}" >{:L('CHECK')}</a>&nbsp; <a href="{:U('task/delete','id='.$vo['task_id'])}" class="del_confirm">{:L('DELETE')}</a>&nbsp; 
+                                </if>
+								<if condition="$vo.isclose eq 1"><a href="{:U('task/open','id='.$vo['task_id'])}">{:L('OPEN')}</a><else /><a href="{:U('task/close','id='.$vo['task_id'])}">{:L('CLOSE')}</a></if>
+                            </td>
+                            <td>
+                                <a href="{:U('task/view','id='.$vo['task_id'])}">{$vo.subject}</a>
+                            </td>
+                            <td>
+                                {$vo.status}
+                            </td>
+                            <td>
+                                <notempty name="vo.owner"><volist name="vo.owner" id="v"><a class="role_info" rel="{$v.role_id}" href="javascript:void(0)">{$v.user_name}</a>,</volist></notempty>
+                            </td>
+                            <td>
+                                <notempty name="vo.about_roles"><volist name="vo.about_roles" id="v"><a class="role_info" rel="{$v.role_id}" href="javascript:void(0)">{$v.user_name}</a>,</volist></notempty>
+                            </td>
+                            <if condition="C('ismobile') neq 1">
+                            <td>
+                                <notempty name="vo.update_date">{$vo.update_date|date="Y-m-d H:i:s",###}</notempty>
+                            </td>
+                            <td>
+                                <notempty name="vo.due_date">{$vo.due_date|date="Y-m-d H:i:s",###}</notempty>
+                            </td>
+                            </if>
+                        </tr>
+                    </volist>
+                </if>
+            </table>
+        </div>
+        <div class="tab-pane fade back_box" id="tab6">
+			<div class="header1">
+				<div class="pull-left two-title" >{:L('RELATED_SCHEDULE')}</div>
+				<div class="pull-right">
+					 <if condition="$customer['is_deleted'] == 0"><a class="btn btn-primary add_event" href="javascript:void(0);" >{:L('ADD')}</a></if>
+				</div>
+				<div style="clear:both;"></div>
+			</div>
+            <table class="table table-hover">
+                <if condition="$customer.event eq null">
+                    <tr>
+                        <td <if condition="C('ismobile') neq 1">colspan="6"<else />colspan="4"</if>>{:L('THERE_IS_NO_DATA')} </td>
+                    </tr>
+                <else /> 
+                    <tr>
+                        <td width="15%">&nbsp;</td>
+                        <td>{:L('THEME')}</td>
+                        <td>{:L('SITE')}</td>
+                        <td>{:L('PRINCIPAL')}</td>
+                        <if condition="C('ismobile') neq 1"><td>{:L('The_start_time')}</td>
+                        <td>{:L('THE_END_TIME')}</td></if>
+                    </tr>
+                    <volist name="customer.event" id="vo">
+                        <tr>
+                            <td class="tdleft">
+                                <if condition="$customer['is_deleted'] == 0"><a href="{:U('event/view','id='.$vo['event_id'])}">{:L('CHECK')}</a>&nbsp; <a href="{:U('event/delete','id='.$vo['event_id'])}" class="del_confirm">{:L('DELETE')}</a>&nbsp;
+                                <if condition="$vo.isclose eq 0"><a href="{:U('event/close','id='.$vo['event_id'])}">{:L('CLOSE')}</a><elseif condition="$vo.isclose eq 1" /><a href="{:U('event/open','id='.$vo['event_id'])}">{:L('OPEN')}</a></if></if>
+                            </td>
+                            <td>
+                                {$vo.subject}
+                            </td>
+                            <td>
+                                {$vo.venue}
+                            </td>
+                            <td>
+                                <notempty name="vo.owner.user_name"><a class="role_info" rel="{$vo.owner.role_id}" href="javascript:void(0)">{$vo.owner.user_name}</a></notempty>
+                            </td>
+                            <if condition="C('ismobile') neq 1">
+                            <td>
+                                <notempty name="vo.start_date">{$vo.start_date|date="Y-m-d H:i:s",###}</notempty>
+                            </td>
+                            <td>
+                                <notempty name="vo.end_date">{$vo.end_date|date="Y-m-d H:i:s",###}</notempty>
+                            </td>
+                            </if>
+                        </tr>
+                    </volist>
+                </if>
+            </table>
+        </div>
+        <div class="tab-pane fade back_box" id="tab4">
+			<div class="header1">
+				<div class="pull-left two-title" >{:L('The_relevant_documents')}</div>
+				<div class="pull-right">
+					<if condition="$customer['is_deleted'] == 0"><a class=" add_file btn btn-primary" href="javascript:void(0);" >{:L('ADD')}</a></if>
+				</div>
+				<div style="clear:both;"></div>
+			</div>
+            <table class="table table-hover"> 
+            <if condition="$customer.file eq null">
+                <tr>
+                    <td <if condition="C('ismobile') neq 1">colspan="5"<else />colspan="3"</if>>{:L('THERE_IS_NO_DATA')} </td>
+                </tr>
+            <else /> 
+                <tr>
+                    <td width="15%">&nbsp;</td>
+                    <td>{:L('FILENAME')}</td>
+                    <td>{:L('SIZE')}</td>
+                    <if condition="C('ismobile') neq 1"><td>{:L('ADDER')}</td>
+                    <td>{:L('ADDTIME')}</td></if>
+                </tr>
+                <volist name="customer.file" id="vo">
+                    <tr>
+                        <td class="tdleft">
+                            <if condition="$customer['is_deleted'] == 0">
+                                <a href="{:U('file/delete', 'id='.$vo['file_id'].'&r=RCustomerFile')}" class="del_confirm">{:L('DELETE')}</a>
+                            </if>
+                        </td>
+                        <td>
+                            <a target="_blank" href="{$vo.file_path}">{$vo.name}</a>
+                        </td>
+                        <td>
+                            {$vo.size}{:L('BYTE')}
+                        </td>
+                        <if condition="C('ismobile') neq 1">
+                        <td>
+                            <notempty name="vo.owner.user_name"><a class="role_info" rel="{$vo.owner.role_id}" href="javascript:void(0)">{$vo.owner.user_name}</a></notempty>
+                        </td>
+                        <td>
+                            <if condition="$vo.create_date neq 0">{$vo.create_date|date="Y-m-d H:i:s",###}</if>
+                        </td>
+                        </if>
+                    </tr>
+                </volist>
+            </if>
+                <tr>
+                    <td <if condition="C('ismobile') neq 1">colspan="5"<else />colspan="3"</if>>
+                        
+                    </td>
+                </tr>
+            </table>
+        </div>
+        <div class="tab-pane fade back_box" id="tab13">
+			<div class="header1">
+				<div class="pull-left two-title" >相关销售</div>
+				<div style="clear:both;"></div>
+			</div>
+            <table class="table table-hover">
+                <if condition="$customer.sales_order eq null">
+                    <tr>
+                        <td colspan="7">{:L('THERE_IS_NO_DATA')} </td>
+                    </tr>
+                <else/> 
+                    <tr>
+                        <td>{:L('ORDER_SN')}</td>
+                        <td>{:L('THEME')}</td>
+                        <td>{:L('TYPE')}</td>
+                        <td>{:L('STATE')}</td>
+                        <td>{:L('QUANTITY')}</td>
+                        <td>{:L('MONEY')}</td>
+                        <td>{:L('CREATION_TIME')}</td>
+                    </tr>
+                    <volist name="customer.sales_order" id="vo">
+                        <tr>
+                            <td>
+                               <a href="{:U('sales/edit', 'id='.$vo['sales_id'])}" >{$vo.sn_code}</a>
+                            </td>
+                            <td>
+                                <a href="{:U('sales/edit', 'id='.$vo['sales_id'])}">{$vo.subject}</a>
+                            </td>
+                            <td>
+                                <if condition="$vo['type'] eq '0'">{:L('SALES')}<else />{:L('SALES_RETURN')}</if>
+                            </td>
+                            <td>
+                                <if condition="$vo['status'] eq '97'">
+                                    {:L('NOT_OUTBOUND')}
+                                <elseif condition="$vo['status'] eq '98'"/>
+                                    {:L('HAVE_BEEN_OUTBOUNDED')}
+                                <elseif condition="$vo['status'] eq '99'"/>
+                                    {:L('NOT_ENTER')}
+                                <elseif condition="$vo['status'] eq '100'"/>
+                                    {:L('HAVE_BEEN_ENTERED')}
+                                </if>
+                            </td>
+                            <td>{$vo.total_amount}</td>
+                            <td>{$vo.sales_price}</td>
+                            <td>{$vo.create_time|date='Y-m-d',###}</td>
+                        </tr>
+                    </volist>
+                </if>
+            </table>
+        </div>
+    </div>
+    <div class="span2 bs-docs-sidebar mar-lefts2" id="right_list" >
+        <ul class="nav nav-list bs-docs-sidenav  span2 widths" >
+            <li class="active first-li"><span class="spans1">编辑详情</span></li>
+			<if condition="$customer['owner_role_id'] == 0">
+				<li><a rel="{$customer['customer_id']}" class="fenpei" href="javascript:void(0)"><img src="__PUBLIC__/img/youce.png"/>&nbsp;&nbsp;&nbsp;{:L('DISTRIBUTION')}</a></li>  
+				<li><a href="{:U('customer/receive', 'customer_id='.$customer['customer_id'])}"><img src="__PUBLIC__/img/youce.png"/>&nbsp;&nbsp;&nbsp;{:L('RECEIVE')}</a> </li>
+				<else/>
+				<li><a href="{:U('customer/fenpei', 'by=put&customer_id='.$customer['customer_id'])}"><img src="__PUBLIC__/img/youce.png"/>&nbsp;&nbsp;&nbsp;{:L('IN_THE_CUSTOMER_POOL')}</a></li> 
+            </if>
+            <li><a href="{:U('contacts/add','redirect=customer&customer_id='.$customer['customer_id'])}"><img src="__PUBLIC__/img/youce.png"/>&nbsp;&nbsp;&nbsp;{:L('ADD_A_CONTACT')}</a> </li>
+            <li><a href="javascript:void(0);" class="add_log"><img src="__PUBLIC__/img/youce.png"/>&nbsp;&nbsp;&nbsp;{:L('ADD_THE_COMMUNICATION_LOG')}</a></li> 
+            <li><a href="javascript:void(0);" class="add_task"><img src="__PUBLIC__/img/youce.png"/>&nbsp;&nbsp;&nbsp;{:L('ADD_TASKS')}</a></li> 
+            <li><a href="javascript:void(0);" class="add_event"><img src="__PUBLIC__/img/youce.png"/>&nbsp;&nbsp;&nbsp;{:L('ADD_THE_SCHEDULE')}</a></li>
+            <li><a href="javascript:void(0);" class="add_file"><img src="__PUBLIC__/img/youce.png"/>&nbsp;&nbsp;&nbsp;{:L('ADD_FILES')}</a></li>
+        </ul>
+    </div>
+</div>
+</div>
+<div class="hide" id="dialog-file" title="{:L('ADD_ATTACHMENT')}">loading...</div>
+<div class="hide" id="dialog-log" title="{:L('Add_the_log')}">loading...</div>
+<div class="hide" id="dialog-log-edit" title="{:L('EDIT_LOG')}">loading...</div>
+<div class="hide" id="dialog-task" title="{:L('ADD_TASKS')}">loading...</div>
+<div class="hide" id="dialog-role-info" title="{:L('EMPLOYEE_INFORMATION')}">loading...</div>
+<div class="hide" id="dialog-event" title="{:L('ADD_THE_SCHEDULE')}">loading...</div>
+<div class="hide" id="dialog-fenpei" title="{:L('DISTRIBUTION_OF_CUSTOMERS')}">loading...</div>
+<div class="hide" id="dialog-map" title="{:L('MAP')}">loading...</div>
+<div class="hide" id="dialog-share" title="客户共享">loading...</div>
+<script type="text/javascript" src="http://api.map.baidu.com/api?v=2.0&ak=Z0Fo0ib1GUgWlylCWeLvQh2U"></script>
+<script type="text/javascript">
+    $('#left_list a').click(function (e) {
+        e.preventDefault();
+        $('#right_list').hide();
+        $('#left_list').parent().next().removeClass('span8').addClass('span10');
+        $(this).tab('show');
+    })
+    $('#left_list a:first').on('click', function (e) {
+        $('#left_list').parent().next().removeClass('span10').addClass('span8');
+        $('#right_list').show();
+    })
+<if condition="C('ismobile') eq 1">width=$('.container').width() * 0.9;<else />width=800;</if>
+$("#dialog-share").dialog({
+    autoOpen: false,
+    modal: true,
+	width: 530,
+	maxHeight: 600,
+	position: ["center",100]
+});
+$("#dialog-role-info").dialog({
+    autoOpen: false,
+    modal: true,
+	width: width,
+	maxHeight: 400,
+	position: ["center",100]
+});
+$("#dialog-file").dialog({
+    autoOpen: false,
+    modal: true,
+	width: width,
+	maxHeight: 400,
+	position: ["center",100]
+});
+$("#dialog-log").dialog({
+    autoOpen: false,
+    modal: true,
+	width: width,
+	maxHeight: 400,
+	position: ["center",100]
+});
+$("#dialog-fenpei").dialog({
+	autoOpen: false,
+	modal: true,
+	width: 600,
+	maxHeight: 400,
+	position: ["center",100],
+	buttons: {
+		"Ok": function () {
+			$('#fenpei_form').submit();	
+			$(this).dialog("close");
+		},
+		"Cancel": function () {
+			$(this).dialog("close");
+		}
+	}
+});
+$("#dialog-log-edit").dialog({
+    autoOpen: false,
+    modal: true,
+	width: width,
+	maxHeight: 400,
+	position: ["center",100]
+});
+$("#dialog-task").dialog({
+    autoOpen: false,
+    modal: true,
+	width: width,
+	maxHeight: 400,
+	position: ["center",100]
+});
+$("#dialog-event").dialog({
+    autoOpen: false,
+    modal: true,
+	width: width,
+	maxHeight: 400,
+	position: ["center",100]
+});
+$("#dialog-map").dialog({
+    autoOpen: false,
+    modal: true,
+	width: 800,
+	minHeight: 600,
+	position: ["center",100]
+});
+$(function(){
+	$(".add_file").click(function(){
+		$('#dialog-file').dialog('open');
+		$('#dialog-file').load('{:U("file/add","r=RCustomerFile&module=customer&id=".$customer["customer_id"])}');
+	});
+	$(".add_log").click(function(){
+		$('#dialog-log').dialog('open');
+		$('#dialog-log').load('{:U("log/add","r=RCustomerLog&module=customer&id=".$customer["customer_id"])}');
+	});
+	$(".edit_log").click(function(){
+		$log_id = $(this).attr('rel');
+		$('#dialog-log-edit').dialog('open');
+		$('#dialog-log-edit').load('{:U("log/edit","id=")}'+$log_id);
+	});
+	$(".add_task").click(function(){
+		$('#dialog-task').dialog('open');
+		$('#dialog-task').load('{:U("task/add","r=RCustomerTask&module=customer&id=".$customer["customer_id"])}');
+	});
+	$(".add_event").click(function(){
+		$('#dialog-event').dialog('open');
+		$('#dialog-event').load('{:U("event/add","r=RCustomerEvent&module=customer&id=".$customer["customer_id"])}');
+	});
+	$(".role_info").click(function(){
+		$role_id = $(this).attr('rel');
+		$('#dialog-role-info').dialog('open');
+		$('#dialog-role-info').load('{:U("user/dialoginfo","id=")}'+$role_id);
+	});
+	$(".more").click(function(){
+		log_id = $(this).attr('rel');
+		$('#llog_'+log_id).attr('class','');
+		$('#slog_'+log_id).attr('class','hide');
+	});
+	$(".fenpei").click(function(){
+		$customer_id = $(this).attr('rel');
+		$('#dialog-fenpei').dialog('open');
+		$('#dialog-fenpei').load('{:U("customer/fenpei","customer_id=")}'+$customer_id);
+	});
+	$(".getMap").click(function(){
+		var map = $(this).attr('rel');
+		$('#dialog-map').dialog('open');
+		$('#dialog-map').load('{:U("setting/mapdialog","map=")}'+map);
+	});
+	$("#share").click(function(){
+		$customer_id = {$Think.get.id};
+		if($customer_id){
+			$('#dialog-share').dialog('open');
+			$('#dialog-share').load("{:U("customer/share")}","customer_id="+$customer_id);
+		}else{
+			alert('{:L('YOU_HAVE_NOT_CHOSEN_ANY_CUSTOMERS')}');
+		}
+	});
+});
+</script>
+<include file="Public:footer" />

@@ -1,0 +1,18 @@
+<style>
+a{text-decoration:none;}
+#success{width:100%;margin:100px auto 0px;}
+h1{width:80%;border-bottom:1px solid #ccc;margin:0 auto;text-align:center;line-height:60px;font-size:25px;}
+.view{float:left;margin-left:10%}
+.view a,.add a{display:block;border-radius:5px;width:100px;height:40px;text-align:center;line-height:40px;}
+.view a{background:#fff;border:1px solid #ccc;color:#000}
+.add a{background:#029be2;border:1px solid #029be2;color:#fff}
+.add{float:left;margin-left:10%}
+</style>
+<div id="success">
+	<div style="width:20%;margin:0 auto;"><img width="100%" src="__PUBLIC__/appImg/head.png" /></div>
+	<h1>{$content}</h1>
+	<!-- <div style="margin-top:20px;">
+		<div class="view"><a href="{:U($model.'/view','id='.$id)}">查看详情</a></div>
+		<div class="add"><a href="{:U($model.'/add')}">继续添加</a></div>
+	</div> -->
+</div>

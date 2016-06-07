@@ -1,0 +1,106 @@
+<html xmlns="http://www.w3.org/1999/xhtml">
+	<head>
+		<meta charset="utf-8">
+		<title>{:C('defaultinfo.name')} - Powered By {:L('AUTHOR')}</title>
+		<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1"/>
+		<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+		<meta name="description" content=""/>
+		<meta name="author" content="{:L('AUTHOR')}"/>
+		<link type="text/css" href="__PUBLIC__/css/app.css" rel="stylesheet" />
+		<link rel="shortcut icon" href="__PUBLIC__/ico/favicon.png"/>
+		<script src="__PUBLIC__/js/jquery-1.9.0.min.js" type="text/javascript"></script>
+		<script>
+		$(function(){
+			$(".title_name").width($(window).width()-20);
+		})
+		</script>
+	</head>
+	<body>
+		<div class="title">
+			<img id="img" src="__PUBLIC__/appImg/title_bg.jpg" />
+			<div class="title_name">{$business.name}</div>
+		</div>
+		<div class="line"></div>
+		<!-- <div class="top">
+
+			<ul class="relevant">
+				<li>
+					<dl>
+						<dt><img src="__PUBLIC__/appImg/shangji.png" /></dt>
+						<dd><span class="count_num">日志（{$business['event_count']}）</span></dd>
+					</dl>
+				</li>
+				<li>
+					<dl>
+						<dt><img src="__PUBLIC__/appImg/lianxiren.png" /></dt>
+						<dd><span class="count_num">产品（{$business['product_count']}）</span></dd>
+					</dl>
+				</li>
+				<li>
+					<dl>
+						<dt><img src="__PUBLIC__/appImg/wenjian.png" /></dt>
+						<dd><span class="count_num">文件（{$business['file_count']}）</span></dd>
+					</dl>
+				</li>
+				<li style="background:none">
+					<dl>
+						<dt><img src="__PUBLIC__/appImg/renwu.png" /></dt>
+						<dd><span class="count_num">任务（{$business['task_count']}）</span></dd>
+					</dl>
+				</li>
+			</ul>
+
+		</div>
+		<div class="shadow"></div> -->
+		<div class="content">
+			<table class="table">
+				<tbody>
+					<tr><th colspan="2">基本信息</th></tr>
+					<tr>
+						<td class="tdleft">创建时间:</td>
+						<td><if condition="$business['create_time'] neq 0">{$business.create_time|date='Y-m-d H:i:s',###}</if></td>
+					</tr>
+					<tr>
+						<td class="tdleft">创建人:</td>
+						<td><a class="role_info" href="role_name:{$business['creator_role_id']}" rel="{$business.create.role_id}">{$business.create.user_name}</if></a></td>
+					</tr>
+					<tr>
+						<td class="tdleft">负责人:</td>
+						<td><a class="role_info" href="role_name:{$business['owner_role_id']}" rel="{$business.owner.role_id}">{$business.owner.user_name}</if></a></td>
+					</tr>
+					<tr>
+						<td class="tdleft">最后修改时间:</td>
+						<td><if condition="$business['update_time'] gt 0">{$business.update_time|date='Y-m-d H:i:s',###}</if></td>
+					</tr>
+					<tr>
+						<td class="tdleft">联系人</td>
+						<td>{$business[contacts_name]}</td>
+					</tr>
+					<tr><th colspan="2">其他信息</th></tr>
+					<volist name="field_list" id="vo">
+						<tr>
+							<td class="tdleft" >{$vo.name}:</td>
+							<if condition="$vo['form_type'] == 'textarea'">
+								<td class="tdright">{$business[$vo['field']]}</td>
+							<elseif condition = " $vo['form_type'] == 'editor'" />
+								<td class="tdright">--暂不支持该类型--</td>
+							<else/>
+								<td>
+									<if condition="$vo['form_type'] eq 'datetime'">
+										<if condition="$business[$vo['field']] gt 0">{$business[$vo['field']]|date='Y-m-d',###}</if>
+									<elseif condition="$vo['field'] eq 'customer_id'"/>
+										<a href="cus_name:{$business['customer_id']},{$flag}">{$business['customer']['name']}</a>
+									<elseif condition="$vo['field'] eq 'contacts_id'"/>
+										{$business['contacts_name']}
+									<elseif  condition="$business[$vo['field']]"/>
+										{$business[$vo['field']]}
+									</if>
+								</td>
+							</if>
+						</tr>
+					</volist>
+				</tbody>
+			</table>
+		</div>
+	</body>
+</html>

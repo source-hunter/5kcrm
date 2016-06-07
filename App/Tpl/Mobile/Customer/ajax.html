@@ -1,0 +1,291 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">		
+<meta name="description" content=""/>
+<meta name="author" content="{:L('AUTHOR')}"/>
+<meta content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0;" name="viewport" />		
+<title>选择联系人</title>
+<script src="__PUBLIC__/js/jquery-1.9.0.min.js" type="text/javascript"></script>
+<script type="text/javascript" src="__PUBLIC__/js/iScroll.js"></script>
+<link rel="stylesheet" href="__PUBLIC__/css/iscroll.css" type="text/css" />		
+<script type="text/javascript">
+
+var myScroll,
+	pullDownEl, pullDownOffset,
+	pullUpEl, pullUpOffset,
+	generatedCount = 0;
+	
+function pullDownAction () {
+	setTimeout(function () {	
+		var p, i;
+		p = 1;			
+		$("#name").val('');
+		customer_id = $("#customer_id").val();
+		url = "{:U('Contacts/radiolistdialog')}&p="+p+'&customer_id='+customer_id;	
+		//url = "/mobile.php?m=Contacts&a=radioListDialog&p="+p;
+		$("#pullUp").show();
+		$("#nodata").hide();
+		$.post(url,function(data){	
+			if(data.status == 1){
+				$("#p").val(data.data.p);
+				$("#total").val(data.data.total);				
+				var html = '';
+				if(data.data.list == null || data.data.list == 'null' || data.data.list == 'undefined' || data.data.list == ''){
+					html = '<li class="load">没有找到您想要的数据！</li>';
+					$("#thelist").html(html);	
+				}else{	
+					for (i=0; i < data.data.list.length; i++) {	
+						var contacts_id = data.data.list[i].contacts_id;
+						var name = data.data.list[i].name;
+						
+						if(data.data.list[i].post != null && data.data.list[i].post != 'null' && data.data.list[i].post != 'undefined'){
+							var post = data.data.list[i].post;
+						}else{
+							var post = '';
+						}						
+						if(data.data.list[i].customer != null && data.data.list[i].customer.name != 'null' && data.data.list[i].customer.name != 'undefined'){
+							var customer_name = data.data.list[i].customer.name;
+						}else{
+							var customer_name = '';
+						}					
+						html += '<li class="click" rel="'+contacts_id+'"> <span>' +name + '</span> [ ' + post+ ' - ' + customer_name+ ' ] </li>';							
+					}	
+					$("#thelist").html(html);		
+					myScroll.refresh();		
+				}				
+			}else{
+				html = '<li class="load">加载数据失败！</li>';
+				$("#thelist").html(html);	
+			}
+		});		
+	}, 1000);	
+}
+
+function pullUpAction () {
+	setTimeout(function () {	
+		var  p, i,total;
+		p = $("#p").val() ? parseInt($("#p").val()) : 1; //当前页
+		total = $("#total").val() ? parseInt($("#total").val()) : 1; //总页数
+		p = p + 1; 		
+		if(p <= total){
+			customer_id = $("#customer_id").val();
+			url = "{:U('Contacts/radiolistdialog')}&p="+p+'&customer_id='+customer_id;
+			//url = "/mobile.php?m=Contacts&a=radioListDialog&p="+p;
+			$.post(url,function(data){	
+				if(data.status == 1){
+					$("#p").val(data.data.p);
+					$("#total").val(data.data.total);				
+					var html = '';
+					if(data.data.list == null || data.data.list == 'null' || data.data.list == 'undefined' || data.data.list == ''){
+						html = '<li class="load">没有找到您想要的数据！</li>';
+						$("#thelist").html(html);	
+					}else{	
+						for (i=0; i < data.data.list.length; i++) {	
+							var contacts_id = data.data.list[i].contacts_id;
+							var name = data.data.list[i].name;
+							if(data.data.list[i].post != null && data.data.list[i].post != 'null' && data.data.list[i].post != 'undefined'){
+								var post = data.data.list[i].post;
+							}else{
+								var post = '';
+							}
+							
+							if(data.data.list[i].customer.name != null && data.data.list[i].customer.name != 'null' && data.data.list[i].customer.name != 'undefined'){
+								var customer_name = data.data.list[i].customer.name;
+							}else{
+								var customer_name = '';
+							}					
+							html = '<li class="click" rel="'+contacts_id+'"> <span>' +name + '</span> [ ' + post+ ' - ' + customer_name+ ' ] </li>';
+							$("#thelist").append(html);					
+						}	
+						myScroll.refresh();		
+					}					
+				}else{
+					html = '<li class="load">加载数据失败！</li>';
+					$("#thelist").html(html);	
+				}
+		    });						
+		}else{
+			if($("#p").val() != '' || $("#total").val() != ''){
+				$("#pullUp").hide();
+				$("#nodata").show();	
+			}
+		}
+		myScroll.refresh();		
+	}, 1000);	
+}
+
+function search () {
+	setTimeout(function () {	
+		var  p, i,search,load;		
+		p = 1; 
+		search = $("#name").val()	
+		
+		//if(search==null || search =='undefined' || search == ''){
+			//alert('请输入要搜索的联系人名称');
+			//return false;
+		//}
+		if(search==null || search =='undefined' || search == ''){
+			customer_id = $("#customer_id").val();
+			url = "{:U('Contacts/radiolistdialog')}&p="+p+'&customer_id='+customer_id;	
+		}else{
+			customer_id = $("#customer_id").val();
+			url = "{:U('Contacts/radiolistdialog')}&p="+p+'&customer_id='+customer_id+'&search='+search;	
+		}
+		//mobile.php?m=Contacts&a=radioListDialog&p="+p+'&search='+search
+		load = '<li class="load"><img src="./Public/img/load.gif" /></li>';
+		$("#pullUp").hide();
+		$("#nodata").hide();
+		$("#thelist").html(load);		
+		$.post(url,function(data){				
+			if(data.status == 1){
+				$("#p").val(data.data.p);
+				$("#total").val(data.data.total);				
+				var html = '';
+				if(data.data.list == null || data.data.list == 'null' || data.data.list == 'undefined' || data.data.list == ''){
+					html = '<li class="load">没有找到您想要的数据！</li>';
+					$("#p").val('');
+					$("#total").val('');
+					$("#thelist").html(html);	
+				}else{				
+					for (i=0; i < data.data.list.length; i++) {	
+						var contacts_id = data.data.list[i].contacts_id;
+							var name = data.data.list[i].name;
+							if(data.data.list[i].post != null && data.data.list[i].post != 'null' && data.data.list[i].post != 'undefined'){
+								var post = data.data.list[i].post;
+							}else{
+								var post = '';
+							}
+							
+							if(data.data.list[i].customer.name != null && data.data.list[i].customer.name != 'null' && data.data.list[i].customer.name != 'undefined'){
+								var customer_name = data.data.list[i].customer.name;
+							}else{
+								var customer_name = '';
+							}				
+							html += '<li class="click" rel="'+contacts_id+'"> <span>' +name + '</span> [ ' + post+ ' - ' + customer_name+ ' ] </li>';									
+					}				
+					$("#thelist").html(html);	
+				}											
+			}else{
+				html = '<li class="load">加载数据失败！</li>';
+				$("#thelist").html(html);				
+			}
+		});		
+		myScroll.refresh();		
+	}, 1000);	
+}
+
+function loaded() {
+	pullDownEl = document.getElementById('pullDown');
+	pullDownOffset = pullDownEl.offsetHeight;
+	pullUpEl = document.getElementById('pullUp');	
+	pullUpOffset = pullUpEl.offsetHeight;
+	
+	myScroll = new iScroll('wrapper', {
+		useTransition: true,
+		topOffset: pullDownOffset,
+		onRefresh: function () {
+			if (pullDownEl.className.match('loading')) {
+				pullDownEl.className = '';
+				pullDownEl.querySelector('.pullDownLabel').innerHTML = '下拉刷新...';
+			} else if (pullUpEl.className.match('loading')) {
+				pullUpEl.className = '';
+				pullUpEl.querySelector('.pullUpLabel').innerHTML = '上划加载更多...';
+			}
+		},
+		onScrollMove: function () {
+			if (this.y > 5 && !pullDownEl.className.match('flip')) {
+				pullDownEl.className = 'flip';
+				pullDownEl.querySelector('.pullDownLabel').innerHTML = '上划加载更多...';
+				this.minScrollY = 0;
+			} else if (this.y < 5 && pullDownEl.className.match('flip')) {
+				pullDownEl.className = '';
+				pullDownEl.querySelector('.pullDownLabel').innerHTML = '下拉刷新...';
+				this.minScrollY = -pullDownOffset;
+			} else if (this.y < (this.maxScrollY - 5) && !pullUpEl.className.match('flip')) {
+				pullUpEl.className = 'flip';
+				pullUpEl.querySelector('.pullUpLabel').innerHTML = '松开立即更新...';
+				this.maxScrollY = this.maxScrollY;
+			} else if (this.y > (this.maxScrollY + 5) && pullUpEl.className.match('flip')) {
+				pullUpEl.className = '';
+				pullUpEl.querySelector('.pullUpLabel').innerHTML = '上划加载更多...';
+				this.maxScrollY = pullUpOffset;
+			}
+		},
+		onScrollEnd: function () {
+			if (pullDownEl.className.match('flip')) {
+				pullDownEl.className = 'loading';
+				pullDownEl.querySelector('.pullDownLabel').innerHTML = '加载中...';				
+				pullDownAction();	
+			} else if (pullUpEl.className.match('flip')) {
+				pullUpEl.className = 'loading';
+				pullUpEl.querySelector('.pullUpLabel').innerHTML = '加载中...';				
+				pullUpAction();	
+			}
+		}
+	});
+	setTimeout(function () { document.getElementById('wrapper').style.left = '0'; }, 800);
+}
+
+function allowFormsInIscroll(){
+	[].slice.call(document.querySelectorAll('input, select, button')).forEach(function(el){
+		el.addEventListener(('ontouchstart' in window)?'touchstart':'mousedown', function(e){
+			e.stopPropagation();
+		})
+	})
+}
+document.addEventListener('DOMContentLoaded', allowFormsInIscroll, false);
+
+document.addEventListener('touchmove', function (e) { e.preventDefault(); }, false);
+
+document.addEventListener('DOMContentLoaded', function () { setTimeout(loaded, 200); }, false);
+</script>
+<style>
+	#thelist li{font-size:11px;color:#666;}
+	#thelist li span{font-size:14px;color:#000;font-weight:bold;}
+</style>
+<script>
+$(function(){
+	$("#thelist").on("click","li.click",function(){		
+		$('#contacts_name', parent.document).val($(this).children().text());  
+		$('#contacts_id', parent.document).val($(this).attr('rel'));  
+		$('#contacts', parent.document).hide();  
+		$(".css",parent.document).attr('href','/Public/css/docs.css');			
+		$('#crmcontent', parent.document).show();  
+	});	
+	$(".return").click(function(){
+		$('#contacts', parent.document).hide();  
+		$(".css",parent.document).attr('href','/Public/css/docs.css');
+		$('#crmcontent', parent.document).show();  
+	})	
+})
+</script>
+</head>
+<body>
+<div id="wrapper">
+	<div id="scroller">
+		<div id="pullDown">
+			<span class="pullDownIcon"></span><span class="pullDownLabel">下拉刷新...</span>
+		</div>
+		<div class="search">
+			<input id="name" type="text" placeholder="按照联系人名称查找" name="name"><input type="submit" name="submit" id="search" onclick="javascript:search();" value="搜索" />
+			<input type="hidden" name="p" id="p" value="1">
+			<input type="hidden" name="total" id="total" value="{$total}">
+			<input type="hidden" name="customer_id" id="customer_id" value="{$customer_id}">
+		</div>
+		<ul id="thelist">
+			<volist name="contactsList" id="vo">
+				<li class="click" rel="{$vo.contacts_id}"><span>{$vo.name}</span> [ {$vo.post} - {$vo.customer.name} ]</li>
+			</volist>			
+		</ul>
+		<div id="nodata" style="display:none;">
+			<span class="pullUpIcon"></span><span class="pullUpLabel">没有更多的数据了！...</span>
+		</div>
+		<div id="pullUp">
+			<span class="pullUpIcon"></span><span class="pullUpLabel">上划加载更多...</span>
+		</div>
+	</div>
+</div>
+<div id="footer"><button class="return">返回</button></div>
+</body>
+</html>
