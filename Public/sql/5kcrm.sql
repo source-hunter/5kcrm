@@ -314,8 +314,7 @@ CREATE TABLE IF NOT EXISTS `5kcrm_customer` (
   `is_locked` int(1) NOT NULL COMMENT '是否锁定',
   `delete_role_id` int(10) NOT NULL COMMENT '删除人',
   `delete_time` int(10) NOT NULL COMMENT '删除时间',
-  PRIMARY KEY (`customer_id`),
-  UNIQUE KEY `name` (`name`)
+  PRIMARY KEY (`customer_id`)
 ) ENGINE=MyISAM  DEFAULT CHARSET=utf8 COMMENT='本表存放客户的相关信息';
 
 CREATE TABLE IF NOT EXISTS `5kcrm_customer_data` (

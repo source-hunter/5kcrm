@@ -138,7 +138,8 @@ class BusinessAction extends Action{
 									$data['discount_price'] = $_POST['discount_price'];
 									$data['sales_price'] = $_POST['sales_price'];
 									$data['business_id'] = $business_id;
-									$m_rbusinessProduct->add($data);	
+									$m_rbusinessProduct->create($data);
+									$m_rbusinessProduct->add();
 								}
 							}
 							if(intval($_POST['status_id']) == 100){
@@ -235,14 +236,17 @@ class BusinessAction extends Action{
 						//在编辑时，如果又添加商品，根据是否存在sales_product_id来进行编辑或添加
 						if(empty($val['r_id'])){
 							//添加
-							$result_product= $r->add($data);
+							$r->create($data);
+							$result_product = $r->add();
 							if(empty($result_product)){
 								$res = false;
 								break;
 							}
 						}else{
 							//编辑
-							$result_product = $r->where('id = %d', $val['r_id'])->save($data);
+							$data['id'] = $val['r_id'];
+							$r->create($data);
+							$result_product = $r->save();
 							if($result_product === false){
 								$res = false;
 								break;
@@ -397,7 +401,7 @@ class BusinessAction extends Action{
 			$business['product'][$k]['category_name'] = $m_product_category->where('category_id = %d',$info['category_id'])->getField('name'); 
 			$total_amount += $v['amount'];
 		}
-		
+			
 		$alert = parseAlert();
 		$this->alert = $alert;
 		$this->business = $business;
@@ -662,8 +666,8 @@ class BusinessAction extends Action{
 			}
 		}
 		if($_GET['listrows']){
-			$listrows = $_GET['listrows'];
-			$params[] = "listrows=" . trim($_GET['listrows']);
+			$listrows = intval($_GET['listrows']);
+			$params[] = "listrows=" . intval($_GET['listrows']);
 		}else{
 			$listrows = 15;
 			$params[] = "listrows=15";

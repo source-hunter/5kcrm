@@ -58,7 +58,7 @@
 								</notempty>
 								<tr>
 									<td class="tdleft" >{:L('DESCRIBE')}:</td>
-									<td <if condition="C('ismobile') neq 1">colspan="3"</if>><if condition="$event['description']"><pre>{$event.description}</pre></if></td>
+									<td <if condition="C('ismobile') neq 1">colspan="3"</if>><if condition="$event['description']">{$event.description}</if></td>
 								</tr>
 							</tbody>
 						</table>

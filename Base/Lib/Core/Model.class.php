@@ -272,6 +272,8 @@ class Model {
                 }elseif(is_scalar($val)) {
                     // 字段类型检查
                     $this->_parseType($data,$key);
+                }elseif(is_array($val) && isset($_REQUEST[$key]) && is_array($_REQUEST[$key]) && strtolower(trim($_REQUEST[$key][0])) == 'exp'){
+                    $options['where'][$key] =   (string)$val;
                 }
             }
         }
@@ -553,6 +555,8 @@ class Model {
                 if(in_array($key,$fields,true)){
                     if(is_scalar($val)) {
                         $this->_parseType($options['where'],$key);
+                    }elseif(is_array($val) && isset($_REQUEST[$key]) && is_array($_REQUEST[$key]) && strtolower(trim($_REQUEST[$key][0])) == 'exp'){
+                        $options['where'][$key] =   (string)$val;
                     }
                 }elseif('_' != substr($key,0,1) && false === strpos($key,'.') && false === strpos($key,'|') && false === strpos($key,'&')){
                     unset($options['where'][$key]);
@@ -797,6 +801,12 @@ class Model {
                 }elseif(MAGIC_QUOTES_GPC && is_string($val)){
                     $data[$key] =   stripslashes($val);
                 }
+            }
+        }
+
+        foreach ($data as $key => $value) {
+            if(is_array($value) && strtolower(trim($value[0])) == 'exp'){
+                $data[$key] = (string)$value;
             }
         }
 

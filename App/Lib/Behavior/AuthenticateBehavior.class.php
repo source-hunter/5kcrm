@@ -11,7 +11,7 @@ class AuthenticateBehavior extends Behavior {
 		
 		if(!session('?user_id') && intval(cookie('user_id')) != 0 && trim(cookie('name')) != '' && trim(cookie('salt_code')) != ''){
 			$user = M('user')->where(array('user_id' => intval(cookie('user_id'))))->find();
-			if (md5(md5($user['user_id'] . $user['name']).$user['salt']) == trim(cookie('salt_code'))) {
+			if (md5(md5($user['user_id'] . $user['name']).$user['password']) == trim(cookie('salt_code'))) {
 				$d_role = D('RoleView');
 				$role = $d_role->where('user.user_id = %d', $user['user_id'])->find();
 				if($user['category_id'] == 1){

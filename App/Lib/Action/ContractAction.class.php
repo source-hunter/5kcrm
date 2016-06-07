@@ -332,8 +332,8 @@ class ContractAction extends Action {
 			$params = array('field='.trim($_REQUEST['field']), 'condition='.$condition, 'search='.$_REQUEST["search"]);
 		}
 		if($_GET['listrows']){
-			$listrows = $_GET['listrows'];
-			$params[] = "listrows=" . trim($_GET['listrows']);
+			$listrows = intval($_GET['listrows']);
+			$params[] = "listrows=" . intval($_GET['listrows']);
 		}else{
 			$listrows = 15;
 			$params[] = "listrows=15";

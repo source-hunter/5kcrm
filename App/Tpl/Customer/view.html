@@ -328,7 +328,7 @@
                         <td>{:L('PRODUCT_NAME')}</td>
                         <td>{:L('CLINCH_A_DEAL_VALENCE')}</td>
                         <td>{:L('QUANTITY')}</td>
-                        <td>{:L('THE_COST_PRICE')}</td>
+                        <td>小计</td>
                         <if condition="C('ismobile') neq 1"><td width="30%">{:L('REMARK')}</td></if>
                     </tr>
                 </thead>
@@ -340,13 +340,13 @@
                                 <a href="{:U('product/view', 'id='.$vo['product_id'])}">{$vo.name}</a>
                             </td>
                             <td>
-                                <if condition="$vo['sales_price'] gt 0">{$vo.sales_price}</if>
+                                <if condition="$vo['unit_price'] gt 0">{$vo.unit_price}</if>
                             </td>
                             <td>
                                 <if condition="$vo['amount'] gt 0">{$vo.amount}</if>
                             </td>
                             <td>
-                                <if condition="$vo['cost_price'] gt 0">{$vo.cost_price}</if>
+                                <if condition="$vo['subtotal'] gt 0">{$vo.subtotal}</if>
                             </td>
                             <if condition="C('ismobile') neq 1"><td>
                                 {$vo.description}

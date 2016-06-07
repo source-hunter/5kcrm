@@ -22,7 +22,7 @@
 		
 		
 		protected function getSalt(){
-			return $this->_salt = substr(md5(time()),0,4);			
+			return $this->_salt = substr(md5(time().rand(1000,9999)),0,4);				
 		}
 		protected function getPassword(){
 			return md5(md5(trim($_POST["password"])) . $this->_salt);

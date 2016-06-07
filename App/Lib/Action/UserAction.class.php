@@ -14,38 +14,6 @@ class UserAction extends Action {
 		);
 		B('Authenticate', $action);
 	}
-	//注册
-	/*
-	public function register() {
-		$user = D('User');
-		if($_GET['op'] == 'checkname'){
-			$this->ajaxReturn(0, "用户名可以使用！",0); 
-			
-			if($user->where('name = "%s"', $_GET['name'])->find()){ 
-				$this->ajaxReturn(1, "用户名不可以使用！",1);
-			}else{ 
-				$this->ajaxReturn(0, "用户名可以使用！"); 
-			}
-		}else{
-			if (isset($_POST['name']) && $_POST['name'] != '') { 	
-				if ($user->create()) {
-					if ($user->add()) {					
-						$this->success('恭喜，添加会员成功！');
-					} else {
-						$this->error('注册失败，请联系管理员！');
-					}
-				} else {	
-					exit($user->getError());			
-				}
-			}else{
-				$category = M('user_category');
-				$this->categoryList = $category->select();
-				
-				$this->display();
-				
-			}
-		}
-	}*/
 	
 	//登录
 	public function login() {
@@ -91,7 +59,7 @@ class UserAction extends Action {
 							session(array('expire'=>259200));
 							cookie('user_id',$user['user_id'],259200);
 							cookie('name',$user['name'],259200);
-							cookie('salt_code',md5(md5($user['user_id'] . $user['name']).$user['salt']),259200);
+							cookie('salt_code',md5(md5($user['user_id'] . $user['name']).$user['password']),259200);
 						}else{
 							session(array('expire'=>3600));
 						}
@@ -195,7 +163,7 @@ class UserAction extends Action {
 			}elseif (md5(md5($user['lostpw_time']) . $user['salt']) == $verify_code) {
 				if ($_REQUEST['password']) {
 					$password = md5(md5(trim($_REQUEST["password"])) . $user['salt']);
-					$m_user->where('user_id =' . $_REQUEST['user_id'])->save(array('password'=>$password, 'lostpw_time'=>0));
+					$m_user->where('user_id = %d', $user_id)->save(array('password'=>$password, 'lostpw_time'=>0));
 					alert('success', L('EDIT_PASSWORD_SUCCESS_PLEASE_LOGIN'), U('user/login'));
 				} else {
 					$this->alert = parseAlert();

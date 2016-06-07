@@ -303,7 +303,7 @@ function getSubPositionTreeCode($position_id, $first=0,  $type=1) {
 			if($user_str) $user_str = '('.$user_str.')';
 			
 			if($type == 1){
-				$link_str = " <span class='control' id='control_file".$value['position_id']."'> <a class='position_edit' rel=".$value['position_id']." href='javascript:void(0)'>".L('EDIT')."</a> &nbsp; <a class='permission' rel=".$value['position_id']." href='javascript:void(0)'>".L('AUTHORIZE')."</a> &nbsp; <a class='allow_permission' rel=".$value['position_id']." href='javascript:void(0)'>".'权限继承'."</a> &nbsp; <a class='position_delete' rel=".$value['position_id']." href='javascript:void(0)'>".L('DELETE')."</a></span>";
+				$link_str = " <span class='control' id='control_file".$value['position_id']."'> <a class='position_edit' rel=".$value['position_id']." href='javascript:void(0)'>".L('EDIT')."</a> &nbsp; <a class='permission' rel=".$value['position_id']." href='javascript:void(0)'>".L('AUTHORIZE')."</a>  &nbsp; <a class='position_delete' rel=".$value['position_id']." href='javascript:void(0)'>".L('DELETE')."</a></span>";
 			}else{
 				//$link_str = " <span class='control' id='control_file".$value['position_id']."'> <a class='allow_permission_id' rel=".$value['position_id']." href='javascript:void(0)'>".'选择'."</a> ";
 				$link_str = " <span class='control' id='control_file".$value['position_id']."'> <input class='allow_permission_id' type='radio' name='parent_id' rel=".$value['position_id']." href='javascript:void(0)'>";

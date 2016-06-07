@@ -34,7 +34,7 @@
 		</if>
 		<tr id='field_td'>
 			<td width="30%" class="tdleft">{:L('FIELDS_NAME')}：</td>
-			<td><if condition="$fields['operating'] eq 0"><input type="text" id="field" name="field" class="span3" value="{$fields.field}"/><else />{$fields.field}</if></td>
+			<td><if condition="$fields['operating'] eq 0"><input type="text" id="field" name="field" class="span3" value="{$fields.field}"/><br/><span style="color:red;">*</span><span id="fieldTip"></span><else />{$fields.field}</if></td>
 		</tr>
 		<tr id="name_td">
 			<td width="30%" class="tdleft">{:L('ID_NAME')}</td>
@@ -129,21 +129,21 @@
         $("#field").formValidator({
 			tipID:"fieldTip",
 			empty:false,
-			onShow:"{:L('CAN_ONLY_CONSIST_OF_LOWERCASE_ENGLISH')}",
-			onFocus:"{:L('CAN_ONLY_CONSIST_OF_ENGLISH')}",
-			onCorrect:"√"
+			onShow:"请勿随意修改，字段名不能是mysql关键字！",
+			onFocus:"字段名不能是mysql关键字！<php>echo L('CAN_ONLY_CONSIST_OF_LOWERCASE_ENGLISH');</php>",
+			onCorrect:"字段名不能是mysql关键字！<php>echo L('CAN_ONLY_CONSIST_OF_LOWERCASE_ENGLISH');</php>"
 		}).inputValidator({
 			min:1,
 			empty:{
 				leftEmpty:false,
 				rightEmpty:false,
-				emptyError:"{:L('BOTH_SIDES_ARE_NOT_FREE')}"
+				emptyError:"<php>echo L('BOTH_SIDES_ARE_NOT_FREE');</php>"
 			},
-			onError:"{:L('LABEL_NAME_CANNOT_BE_EMPTY')}"
+			onError:"<php>echo L('LABEL_NAME_CANNOT_BE_EMPTY');</php>"
 		}).regexValidator({
 			regExp:"field",param:'i',
 			dataType:"enum",
-			onError:"{:L('ONLY_CONSIST_OF_LOWERCASE_ENGLISH')}"});
+			onError:"<php>echo L('ONLY_CONSIST_OF_LOWERCASE_ENGLISH');</php>"});
         </if>
 		type_id = '{$fields.form_type}';
 		if(type_id == 'box'){

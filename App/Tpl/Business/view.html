@@ -9,7 +9,7 @@
 				<li><a href="#tab8">{:L('PROMOTE_THE_HISTORY')}&nbsp;&nbsp;<span class="badge badge-success"><if condition="$status_counts">{$status_counts}</if></span></a></li>
 				<li><a href="#tab3">{:L('COMMUNICATION_LOGS')}&nbsp;&nbsp;<span class="badge badge-success"><if condition="$business['log_count']">{$business['log_count']}</if></span></a></li>
 				<li><a href="#tab7">{:L('CONTRACT')}&nbsp;&nbsp;<span class="badge badge-success"><if condition="$business['contract_count']">{$business['contract_count']}</if></span></a></li>
-				<li><a href="#tab2">{:L('PRODUCT')}&nbsp;&nbsp;<span class="badge badge-success"><if condition="$business['product_count']">{$business['product_count']}</if></span></a></li>
+				<!-- <li><a href="#tab2">{:L('PRODUCT')}&nbsp;&nbsp;<span class="badge badge-success"><if condition="$business['product_count']">{$business['product_count']}</if></span></a></li> -->
 				<li><a href="#tab4">{:L('TASK')}&nbsp;&nbsp;<span class="badge badge-success"><if condition="$business['task_count']">{$business['task_count']}</if></span></a></li>
 				<li><a href="#tab5">{:L('SCHEDULE')}&nbsp;&nbsp;<span class="badge badge-success"><if condition="$business['event_count']">{$business['event_count']}</if></span></a></li>
 				<li><a href="#tab6">{:L('ATTACHMENT')}&nbsp;&nbsp;<span class="badge badge-success"><if condition="$business['file_count']">{$business['file_count']}</if></span></a></li>
@@ -89,6 +89,76 @@
 								</if>
 							</if>
 							</volist>
+						</tbody>
+					</table>
+					<!-- 产品 -->
+					<div class="header1">
+						<div class="pull-left two-title" style="margin:15px 0; ">
+							{:L('RELATED_PRODUCTS')}
+							<span class="badge badge-success"><if condition="$business['product_count']">{$business['product_count']}</if></span>
+						</div>
+					</div>
+
+					<table class="table table-bordered" id="no-input-border" width="95%" border="0" cellspacing="1" cellpadding="0">
+						<thead>
+							<tr style="background-color:#E0E8FF;text-align:center;">
+								<td class="span2">产品</td>
+								<td>数量</td>
+								<td>单价</td>
+								<td>折扣率(%)</td>
+								<td>税率(%)</td>
+								<td>小计</td>
+								<td class="span2">备注</td>
+							</tr>
+						</thead>
+						
+						<tbody>
+							<volist name="business.product" id="vo">
+								<input type="hidden" name="product[{$key+1}][r_id]" value="{$vo.id}"/>
+								<tr id="row_{$key+1}">
+									<td>
+										{$vo.info.name}
+									</td>
+									<td>
+										{$vo.amount}
+									</td>
+									<td>
+										{$vo.unit_price}
+									</td>
+									<td>
+										{$vo.discount_rate}
+									</td>
+									<td>
+										{$vo.tax_rate}
+									</td>
+									<td>
+										{$vo.subtotal}
+									</td>
+									<td>
+										{$vo.description}
+									</td>
+								</tr>
+							</volist>
+						</tbody>
+						<tbody id="add_products">
+						</tbody>
+						<tbody>
+							<tr style="background-color:#FFFFF3;color:#808080">
+								<td>合计</td>
+								<td style="text-align:center" id="total_amount_val">{$total_amount}</td>
+								<td></td>
+								<td></td>
+								<td></td>
+								<td style="text-align:center" id="subtotal_val" colspan="2">{$vo.subtotal_val}</td>
+							</tr>
+							<tr style="background-color:#FFFFF1">
+								<td>其他费用</td>
+								<td style="text-align:center">{$vo.discount_price}</td>
+								<td></td>
+								<td></td>
+								<td>最终费用</td>
+								<td  style="text-align:center" colspan="2">{$vo.sales_price}</td>
+							</tr>
 						</tbody>
 					</table>
 				</div>
@@ -218,7 +288,8 @@
 					</if>
 				</table>
 			</div>
-			<div class="tab-pane fade back_box" id="tab2">
+			<!-- 产品 -->
+			<!-- <div class="tab-pane fade back_box" id="tab2">
 				<div class="header1">
 					<div class="pull-left two-title" >{:L('RELATED_PRODUCTS')}</div>
 					<div class="pull-right"> 
@@ -282,7 +353,7 @@
 						</tbody>
 					</if>
 				</table>
-			</div>
+			</div> -->
 			<div class="tab-pane fade back_box" id="tab4">
 				<div class="header1">
 					<div class="pull-left two-title" >{:L('RELATED_TASKS')}</div>

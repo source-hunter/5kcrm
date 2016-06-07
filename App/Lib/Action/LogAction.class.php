@@ -1,4 +1,4 @@
-﻿<?php
+<?php
 class LogAction extends Action{
 	public function _initialize(){
 		$action = array(

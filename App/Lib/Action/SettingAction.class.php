@@ -798,8 +798,12 @@ class SettingAction extends Action{
 		$field = M('fields');
 		if($this->isPost()){
 			$field_model = D('Field');
+			$field_m = 'crm_';
+			for ($i = 1; $i <= 6; $i++) {
+				$field_m .= chr(rand(97, 122));
+			}
 			$data['model']         = $this->_post('model'); //模块名称
-			$data['field']         = $this->_post('field'); //字段名称
+			$data['field']         = $field_m; //字段名称
 			$data['form_type']     = $this->_post('form_type'); //字段类型
 			$data['default_value'] = $this->_post('default_value');  //默认值
 			$data['max_length']    = $this->_post('max_length');
@@ -809,6 +813,7 @@ class SettingAction extends Action{
 			}
 			if($field_model->add($data) !== false){
 				$field->create();
+				$field->field = $field_m; //字段名称
 				if($this->_post('form_type') == 'box'){
 					$setting = $this->_post('setting');
 					$field->setting = 'array(';
@@ -858,8 +863,6 @@ class SettingAction extends Action{
 			$data['default_value'] = $this->_post('default_value');  //默认值
 			$data['max_length']    = $this->_post('max_length');
 			$data['is_main']       = $field_info['is_main'];
-			
-			
 			
 			if($field->where(array('field'=>$data['field'],'model'=>array(array('eq',$data['model']),array('eq',''),'OR'),'field_id'=>array('neq',$field_id)))->find()){
 				alert('error',L('THE FIELD NAME ALREADY EXISTS'),$_SERVER['HTTP_REFERER']);

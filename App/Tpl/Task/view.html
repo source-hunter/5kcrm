@@ -73,7 +73,7 @@
 								<td class="tdleft" >
 									{:L('DESCRIPTION')}：
 								</td><td <if condition="C('ismobile') neq 1">colspan="3"</if> >
-									<if condition="$task.description neq null"><pre style="min-height: 200px;">{$task.description}</pre></if>
+									<if condition="$task.description neq null">{$task.description}</if>
 								</td>
 							</tr>
 							<tr>

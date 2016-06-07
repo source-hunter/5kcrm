@@ -48,12 +48,12 @@
 				<br/><span style="color:red;">*</span>{:L('INPUT_OPTION_VALUE')}<br/>{:L('OPTION1')}<br/>{:L('OPTION2')}<br />
 			</td>
 		</tr>
-		<tr id='field_td'>
+		<!-- <tr id='field_td'>
 			<td width="30%" class="tdleft">{:L('FIELDS_NAME')}：</td>
 			<td>
 			<input type="text" id="field" name="field" class="span3"/><br /><span style="color:red;">*</span><span id="fieldTip"></span>
 			</td>
-		</tr>
+		</tr> -->
 		<tr id="name_td">
 			<td width="30%" class="tdleft">{:L('ID_NAME')}</td>
 			<td><input type="text" name="name" id="name" class="span3"/><br/><span style="color:red;">*</span><span id="nameTip"></span></td>
@@ -127,26 +127,7 @@
             },
             submitAfterAjaxPrompt : '{:L('AJAX_VALIDATING_PLEASE_WAIT')}'
         });
-        $("#field").formValidator({
-			tipID:"fieldTip",
-			empty:false,
-			onShow:"{:L('CAN_ONLY_CONSIST_OF_LOWERCASE_ENGLISH')}",
-			onFocus:"{:L('CAN_ONLY_CONSIST_OF_ENGLISH')}",
-			onCorrect:"{:L('CORRECT_FORMAT')}"
-		}).inputValidator({
-			min:1,
-			empty:{
-				leftEmpty:false,
-				rightEmpty:false,
-				emptyError:"{:L('BOTH_SIDES_ARE_NOT_FREE')}"
-			},
-			onError:"{:L('FIELD_NAME_CANNOT_BE_EMPTY')}"
-		}).regexValidator({
-			regExp:"field",
-			param:'i',
-			dataType:"enum",
-			onError:"{:L('INVALID_FORMAT')}"
-		});
+        
         $("#name").formValidator({
 			tipID:"nameTip",
 			empty:false,

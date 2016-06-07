@@ -1,6 +1,18 @@
-﻿<?php
+<?php
 class LogMobile extends Action {
 	
+	public function _initialize(){
+		$action = array(
+			'permission'=>array(),
+			'allow'=>array('add','view','edit','delete')
+		);
+		B('AppAuthenticate', $action);
+		$this->_permissionRes = getPerByAction(MODULE_NAME,ACTION_NAME);
+		Global $role;
+		$this->role = $role;
+		Global $roles;
+		$this->roles = $roles;
+	}
 	/*
 	沟通日志创建
 	module = customer 需添加沟通日志的模块
